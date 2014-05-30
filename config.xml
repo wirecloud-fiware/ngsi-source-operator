@@ -84,7 +84,7 @@
         <vcard:email>aarranz@conwet.com</vcard:email>
       </vcard:Work>
     </vcard:addr>
-    <dcterms:description>This operator allows you to use any NGSI server as source of data. This will be acomplished creating a subscription to the NGSI server to obtain real time notifications about changes.</dcterms:description>
+    <dcterms:description>This operator allows you to use any NGSI server as source of data. This will be acomplished by creating a subscription to the NGSI server to obtain real time notifications about changes on the entities of interest.</dcterms:description>
     <wire:hasImageUri rdf:resource="images/catalogue.png"/>
     <wire:hasPlatformPreference>
       <wire:PlatformPreference rdf:nodeID="Ndbee385a7a474f8aac6b6c794e594c82">
