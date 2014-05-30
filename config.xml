@@ -70,7 +70,7 @@
     </wire:hasPlatformPreference>
     <dcterms:creator>
       <foaf:Person rdf:nodeID="N09fe012b2bf94e64a2f6ceaa11f37b53">
-        <foaf:name>sblanco</foaf:name>
+        <foaf:name>aarranz</foaf:name>
       </foaf:Person>
     </dcterms:creator>
     <dcterms:title>ngsi-source</dcterms:title>
