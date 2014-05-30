@@ -51,7 +51,7 @@
     <wire:hasPlatformPreference>
       <wire:PlatformPreference rdf:nodeID="N5adc340f338b482c8a3dc339185164cb">
         <dcterms:description>URL of the PubSub Context Broker where the entities are going to be created</dcterms:description>
-        <wire:default>http://130.206.82.140:1026/</wire:default>
+        <wire:default>http://orion.lab.fi-ware.org:10026/</wire:default>
         <dcterms:title>ngsi_server</dcterms:title>
         <wire:type>text</wire:type>
         <wire:index>0</wire:index>
@@ -64,7 +64,7 @@
         <rdfs:label>NGSI proxy URL</rdfs:label>
         <dcterms:description>URL of the PubSub Context Broker proxy</dcterms:description>
         <wire:type>text</wire:type>
-        <wire:default>http://wirecloud.ld.testbed.fi-ware.eu:3000/</wire:default>
+        <wire:default>http://mashup.lab.fi-ware.org:3000/</wire:default>
         <dcterms:title>ngsi_proxy</dcterms:title>
       </wire:PlatformPreference>
     </wire:hasPlatformPreference>
