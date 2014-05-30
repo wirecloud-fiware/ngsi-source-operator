@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:wire="http://wirecloud.conwet.fi.upm.es/ns/widget#"
+  xmlns:gr="http://purl.org/goodrelations/v1#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:usdl="http://www.linked-usdl.org/ns/usdl-core#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:vcard="http://www.w3.org/2006/vcard/ns#"
+>
+  <wire:Operator rdf:about="http://wirecloud.conwet.fi.upm.es/ns/widget#CoNWeT/ngsi-source/2.99">
+    <usdl:versionInfo>2.99</usdl:versionInfo>
+    <wire:hasRequirement>
+      <wire:Feature rdf:nodeID="Nb1b3611536864e2ab4f947ff5cbd0714">
+        <rdfs:label>NGSI</rdfs:label>
+      </wire:Feature>
+    </wire:hasRequirement>
+    <wire:hasPlatformPreference>
+      <wire:PlatformPreference rdf:nodeID="N40a6856217014f48bb4beca295e0a9fd">
+        <dcterms:description>Attributes to monitor for updates</dcterms:description>
+        <rdfs:label>NGSI Attributes</rdfs:label>
+        <wire:type>text</wire:type>
+        <wire:default>Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent</wire:default>
+        <wire:index>3</wire:index>
+        <dcterms:title>ngsi_update_attributes</dcterms:title>
+      </wire:PlatformPreference>
+    </wire:hasPlatformPreference>
+    <wire:hasChangeLog rdf:resource="doc/changelog.md"/>
+    <wire:hasPlatformWiring>
+      <wire:PlatformWiring rdf:nodeID="N1979dc59fc5f42a48ceb276c9bc89609">
+        <wire:hasOutputEndpoint>
+          <wire:OutputEndpoint rdf:nodeID="N7623fb1996f14b4cbbe8d848d67d9830">
+            <dcterms:title>entityOutput</dcterms:title>
+            <wire:type>text</wire:type>
+            <wire:friendcode>entity</wire:friendcode>
+            <wire:index>0</wire:index>
+            <rdfs:label>Provide entity</rdfs:label>
+            <dcterms:description>Every change over each entity fires an event</dcterms:description>
+          </wire:OutputEndpoint>
+        </wire:hasOutputEndpoint>
+      </wire:PlatformWiring>
+    </wire:hasPlatformWiring>
+    <foaf:page rdf:resource="https://github.com/wirecloud-fiware/ngsi-source"/>
+    <usdl:utilizedResource>
+      <usdl:Resource rdf:about="js/main.js">
+        <wire:index>0</wire:index>
+      </usdl:Resource>
+    </usdl:utilizedResource>
+    <wire:displayName>NGSI source</wire:displayName>
+    <wire:hasPlatformPreference>
+      <wire:PlatformPreference rdf:nodeID="N5adc340f338b482c8a3dc339185164cb">
+        <dcterms:description>URL of the PubSub Context Broker where the entities are going to be created</dcterms:description>
+        <wire:default>http://130.206.82.140:1026/</wire:default>
+        <dcterms:title>ngsi_server</dcterms:title>
+        <wire:type>text</wire:type>
+        <wire:index>0</wire:index>
+        <rdfs:label>NGSI server URL</rdfs:label>
+      </wire:PlatformPreference>
+    </wire:hasPlatformPreference>
+    <wire:hasPlatformPreference>
+      <wire:PlatformPreference rdf:nodeID="N2aa6c17e87594fed85f44d88053f8751">
+        <wire:index>1</wire:index>
+        <rdfs:label>NGSI proxy URL</rdfs:label>
+        <dcterms:description>URL of the PubSub Context Broker proxy</dcterms:description>
+        <wire:type>text</wire:type>
+        <wire:default>http://wirecloud.ld.testbed.fi-ware.eu:3000/</wire:default>
+        <dcterms:title>ngsi_proxy</dcterms:title>
+      </wire:PlatformPreference>
+    </wire:hasPlatformPreference>
+    <dcterms:creator>
+      <foaf:Person rdf:nodeID="N09fe012b2bf94e64a2f6ceaa11f37b53">
+        <foaf:name>sblanco</foaf:name>
+      </foaf:Person>
+    </dcterms:creator>
+    <dcterms:title>ngsi-source</dcterms:title>
+    <usdl:hasProvider>
+      <gr:BusinessEntity rdf:nodeID="N13316d0ce4e34864ad41181cfb9d7478">
+        <foaf:name>CoNWeT</foaf:name>
+      </gr:BusinessEntity>
+    </usdl:hasProvider>
+    <vcard:addr>
+      <vcard:Work rdf:nodeID="N569304be5b864249b6233599ecb6d642">
+        <vcard:email>aarranz@conwet.com</vcard:email>
+      </vcard:Work>
+    </vcard:addr>
+    <dcterms:description>This operator allows you to use any NGSI server as source of data. This will be acomplished creating a subscription to the NGSI server to obtain real time notifications about changes.</dcterms:description>
+    <wire:hasImageUri rdf:resource="images/catalogue.png"/>
+    <wire:hasPlatformPreference>
+      <wire:PlatformPreference rdf:nodeID="Ndbee385a7a474f8aac6b6c794e594c82">
+        <wire:default>Node, AMMS, Regulator</wire:default>
+        <wire:type>text</wire:type>
+        <dcterms:description>Entities to monitor</dcterms:description>
+        <wire:index>2</wire:index>
+        <dcterms:title>ngsi_entities</dcterms:title>
+        <rdfs:label>NGSI entities</rdfs:label>
+      </wire:PlatformPreference>
+    </wire:hasPlatformPreference>
+  </wire:Operator>
+</rdf:RDF>
