@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="3.0a1">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="3.0a2">
     <details>
         <title>NGSI source</title>
         <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
         <email>aarranz@conwet.com</email>
         <image>images/catalogue.png</image>
         <description>Retrieve Orion Context Broker entities and their updates in real time.</description>
-        <longdescription>README.md</longdescription>
+        <longdescription>DESCRIPTION.md</longdescription>
         <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
         <license>AGPLv3+ w/linking exception</license>
         <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
