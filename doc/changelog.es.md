@@ -1,5 +1,11 @@
+3.0a2
+=====
+
+* Versión inicial de la guia de usuario (en inglés).
+
 3.0a1
 =====
+
 * Mejoras en los metadatos y documentación del operador.
 
 2.99

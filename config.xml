@@ -2,25 +2,25 @@
 <operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="3.0a2">
     <details>
         <title>NGSI source</title>
+        <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
         <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
         <email>aarranz@conwet.com</email>
         <image>images/catalogue.png</image>
         <description>Retrieve Orion Context Broker entities and their updates in real time.</description>
         <longdescription>DESCRIPTION.md</longdescription>
-        <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
         <license>AGPLv3+ w/linking exception</license>
         <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
-        <doc>doc/index.html</doc>
+        <doc>doc/userguide.md</doc>
         <changelog>doc/changelog.md</changelog>
     </details>
     <requirements>
         <feature name="NGSI"/>
     </requirements>
     <preferences>
-        <preference name="ngsi_server" type="text" label="NGSI server URL" description="URL of the PubSub Context Broker where the entities are going to be created" default="http://orion.lab.fi-ware.org:10026/"/>
-        <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the PubSub Context Broker proxy" default="http://mashup.lab.fi-ware.org:3000/"/>
-        <preference name="ngsi_entities" type="text" label="NGSI entities" description="Entities to monitor" default="Node, AMMS, Regulator"/>
-        <preference name="ngsi_update_attributes" type="text" label="NGSI Attributes" description="Attributes to monitor for updates" default="Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent"/>
+        <preference name="ngsi_server" type="text" label="NGSI server URL" description="URL of the Orion Context Broker to use for retrieving entity information" default="http://orion.lab.fi-ware.org:10026/"/>
+        <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the PubSub Context Broker proxy to use for receiving notifications about changes" default="http://mashup.lab.fi-ware.org:3000/"/>
+        <preference name="ngsi_entities" type="text" label="NGSI entities" description="Entities to monitor and retrieve from the NGSI server" default="Node, AMMS, Regulator"/>
+        <preference name="ngsi_update_attributes" type="text" label="Monitored NGSI Attributes" description="Attributes to monitor for updates. Currently, the Orion Context Broker requires a list of attributes to monitor for changes, so this field cannot be empty." default="Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent"/>
     </preferences>
     <wiring>
         <outputendpoint name="entityOutput" type="text" label="Provide entity" description="Every change over each entity fires an event" friendcode="entity"/>

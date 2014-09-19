@@ -1,3 +1,8 @@
+3.0a2
+=====
+
+* Initial user's guide
+
 3.0a1
 =====
 
