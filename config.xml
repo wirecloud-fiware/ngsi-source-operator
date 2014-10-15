@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="3.0a2">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="3.0">
     <details>
         <title>NGSI source</title>
         <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
@@ -18,8 +18,8 @@
     </requirements>
     <preferences>
         <preference name="ngsi_server" type="text" label="NGSI server URL" description="URL of the Orion Context Broker to use for retrieving entity information" default="http://orion.lab.fi-ware.org:10026/"/>
-        <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the PubSub Context Broker proxy to use for receiving notifications about changes" default="http://mashup.lab.fi-ware.org:3000/"/>
-        <preference name="ngsi_entities" type="text" label="NGSI entities" description="Entities to monitor and retrieve from the NGSI server" default="Node, AMMS, Regulator"/>
+        <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the Orion Context Broker proxy to use for receiving notifications about changes" default="http://mashup.lab.fi-ware.org:3000/"/>
+        <preference name="ngsi_entities" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. Thies field cannot be empty." default="Node, AMMS, Regulator"/>
         <preference name="ngsi_update_attributes" type="text" label="Monitored NGSI Attributes" description="Attributes to monitor for updates. Currently, the Orion Context Broker requires a list of attributes to monitor for changes, so this field cannot be empty." default="Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent"/>
     </preferences>
     <wiring>
