@@ -1,3 +1,9 @@
+3.0
+===
+
+* Initial support for filtering entities by id.
+*
+
 3.0a2
 =====
 

@@ -20,6 +20,7 @@
         <preference name="ngsi_server" type="text" label="NGSI server URL" description="URL of the Orion Context Broker to use for retrieving entity information" default="http://orion.lab.fi-ware.org:10026/"/>
         <preference name="ngsi_proxy" type="text" label="NGSI proxy URL" description="URL of the Orion Context Broker proxy to use for receiving notifications about changes" default="http://mashup.lab.fi-ware.org:3000/"/>
         <preference name="ngsi_entities" type="text" label="NGSI entity types" description="A comma separated list of entity types to use for filtering entities from the Orion Context broker. Thies field cannot be empty." default="Node, AMMS, Regulator"/>
+        <preference name="ngsi_id_filter" type="text" label="Id pattern" description="Id pattern for filtering entities. This preference can be empty, in that case, entities won't be filtered by id." default=""/>
         <preference name="ngsi_update_attributes" type="text" label="Monitored NGSI Attributes" description="Attributes to monitor for updates. Currently, the Orion Context Broker requires a list of attributes to monitor for changes, so this field cannot be empty." default="Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent"/>
     </preferences>
     <wiring>

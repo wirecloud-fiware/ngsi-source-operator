@@ -74,9 +74,13 @@
         var types = MashupPlatform.prefs.get('ngsi_entities').split(new RegExp(',\\s*'));
         var entityIdList = [];
         var entityId;
+        var id_pattern = MashupPlatform.prefs.get('ngsi_id_filter');
+        if (id_pattern === '') {
+            id_pattern = '.*';
+        }
         for (var i = 0; i < types.length; i++) {
             entityId = {
-                id: '.*',
+                id: id_pattern,
                 type: types[i],
                 isPattern: true
             };
