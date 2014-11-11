@@ -1,3 +1,9 @@
+3.0.1
+=====
+
+* Added support for using the credentials of the user currently logged in
+  WireCloud.
+
 3.0
 ===
 
