@@ -3,6 +3,11 @@
 
 * Added support for using the credentials of the user currently logged in
   WireCloud.
+* Updated the default NGSI proxy preference value so it points to the new NGSI
+  proxy instance at FIWARE Lab. This pretends to fix problems raised by the use
+  of port 3000 (e.g. firewalls may drop traffic using this port) and the ones
+  raised by mixing contents comming from HTTP and HTTPS (browsers disallows
+  contents coming from HTTP if the main web page uses HTTPS).
 
 3.0
 ===
