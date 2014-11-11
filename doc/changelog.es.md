@@ -1,3 +1,8 @@
+3.0
+===
+
+* Añadido soporte para filtrar por identificador de entidad (usando expresiones regulares)
+
 3.0a2
 =====
 
