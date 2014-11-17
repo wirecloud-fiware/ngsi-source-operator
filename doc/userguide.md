@@ -18,6 +18,33 @@ doesn't meet the following assumptions:
 * attribute types don't matter or are already known
 * attribute metadata don't matter or is already known
 
+Settings
+--------
+
+* **NGSI server URL:** URL of the Orion Context Broker to use for retrieving
+  entity information.
+* **NGSI proxy URL:** URL of the Orion Context Broker proxy to use for receiving
+  notifications about changes.
+* **Use the FIWARE credentials of the user:** Use the FIWARE credentials of the
+  user logged into WireCloud. Take into account this option cannot be enabled if
+  you want to use this widget in a public workspace as anonoymous users doesn't
+  have a valid FIWARE auth token.
+* **NGSI entity types:** A comma separated list of entity types to use for
+  filtering entities from the Orion Context broker. This field cannot be empty.
+* **Id pattern:** Id pattern for filtering entities. This preference can be
+  empty, in that case, entities won't be filtered by id.
+* **Monitored NGSI Attributes:** Attributes to monitor for updates. Currently,
+  the Orion Context Broker requires a list of attributes to monitor for changes,
+  so this field cannot be empty.
+
+**NOTE:** Currently, the context broker instance available at
+http://orion.lab.fi-ware.org:1026 requires authentication, this make it unusable
+from public workspaces. If you want to use the global context broker instance
+from a public workspaces, disable the uses of credentials and use the following
+URL for the NGSI server: http://orion.lab.fi-ware.org:10026. Take into account
+that this URL is only enabled for work around those authentication problems and
+will be disabled in a near future providing a proper solution.
+
 Wiring
 ------
 
