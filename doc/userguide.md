@@ -1,6 +1,3 @@
-NGSI Source Operator - User's Manual
-====================================
-
 Introduction
 ------------
 
@@ -44,6 +41,15 @@ from a public workspaces, disable the uses of credentials and use the following
 URL for the NGSI server: http://orion.lab.fi-ware.org:10026. Take into account
 that this URL is only enabled for work around those authentication problems and
 will be disabled in a near future providing a proper solution.
+
+**NOTE 2:** If you are using a custom instance of the Orion Context Broker, take
+into account that by default Orion doesn't support sending notifications to
+https endpoints. In those cases you can make use of a NGSI available through
+http at (http://ngsiproxy.lab.fi-ware.org) instead of using the default one that
+uses https (https://ngsiproxy.lab.fi-ware.org). Anyway, it is very recommended
+to enable the https support (see this
+[link](http://stackoverflow.com/questions/23338154/orion-context-broker-https-for-subscribers)
+for more info about this matter).
 
 Wiring
 ------
