@@ -1,3 +1,9 @@
+3.0.2
+=====
+
+* Update FIWARE Lab URLs using the new schema (fiware.org instead of
+  fi-ware.org)
+
 3.0.1
 =====
 

@@ -4,4 +4,4 @@ notifications about changes on the entities of interest.
 
 ### References
 
-* [Orion Context Broker info](http://catalogue.fi-ware.org/enablers/publishsubscribe-context-broker-orion-context-broker)
+* [Orion Context Broker info](http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker)
