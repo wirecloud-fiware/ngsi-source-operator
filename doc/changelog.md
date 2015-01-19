@@ -3,6 +3,7 @@
 
 * Update FIWARE Lab URLs using the new schema (fiware.org instead of
   fi-ware.org)
+* Improved error control and improve log generation.
 
 3.0.1
 =====
