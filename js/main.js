@@ -98,22 +98,26 @@
             flat: true,
             onNotify: handlerReceiveEntity.bind(this),
             onSuccess: function (data) {
-                MashupPlatform.widget.log("Subscription created successfully (id: " + data.subscriptionId + ")", MashupPlatform.log.INFO);
+                MashupPlatform.operator.log("Subscription created successfully (id: " + data.subscriptionId + ")", MashupPlatform.log.INFO);
                 this.subscriptionId = data.subscriptionId;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
                 window.addEventListener("beforeunload", function () {
                     this.connection.cancelSubscription(this.subscriptionId, {
                         onSuccess: function () {
-                            MashupPlatform.widget.log("Subscription cancelled sucessfully", MashupPlatform.log.INFO);
+                            MashupPlatform.operator.log("Subscription cancelled sucessfully", MashupPlatform.log.INFO);
                         },
                         onFailure: function () {
-                            MashupPlatform.widget.log("Error cancelling current context broker subscription");
+                            MashupPlatform.operator.log("Error cancelling current context broker subscription");
                         }
                     });
                 }.bind(this));
             }.bind(this),
-            onFailure: function () {
-                MashupPlatform.widget.log("Error creating subscription in the context broker server");
+            onFailure: function (e) {
+                if (e instanceof NGSI.ProxyConnectionError) {
+                    MashupPlatform.operator.log("Error connecting with the NGSI Proxy: " + e.cause.message);
+                } else {
+                    MashupPlatform.operator.log("Error creating subscription in the context broker server: " + e.message);
+                }
             }
         };
         this.connection.createSubscription(entityIdList, attributeList, duration, throttling, notifyConditions, options);
@@ -129,10 +133,10 @@
             }];
             var options = {
                 onSuccess: function () {
-                    MashupPlatform.widget.log("Subscription refreshed sucessfully", MashupPlatform.log.INFO);
+                    MashupPlatform.operator.log("Subscription refreshed sucessfully", MashupPlatform.log.INFO);
                 },
                 onFailure: function () {
-                    MashupPlatform.widget.log("Error refreshing current context broker subscription");
+                    MashupPlatform.operator.log("Error refreshing current context broker subscription");
                 }
             };
             this.connection.updateSubscription(this.subscriptionId, duration, throttling, notifyConditions, options);
@@ -159,10 +163,10 @@
         if (this.subscriptionId != null) {
             this.connection.cancelSubscription(this.subscriptionId, {
                 onSuccess: function () {
-                    MashupPlatform.widget.log("Old subscription has been cancelled sucessfully", MashupPlatform.log.INFO);
+                    MashupPlatform.operator.log("Old subscription has been cancelled sucessfully", MashupPlatform.log.INFO);
                 },
                 onFailure: function () {
-                    MashupPlatform.widget.log("Error cancelling old subscription", MashupPlatform.log.WARN);
+                    MashupPlatform.operator.log("Error cancelling old subscription", MashupPlatform.log.WARN);
                 },
                 onComplete: doInitialSubscription.bind(this)
             });
