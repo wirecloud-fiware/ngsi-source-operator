@@ -56,24 +56,24 @@ Wiring
 
 Input Endpoints:
 
-* This widget has no output endpoint
+* This widget has no input endpoint
 
 Output Endpoints:
 
-* **Provide entity:** This operator sends an event thought this endpoint for
-each entity update retrieved from the context broker. In addition to this, this
-operator send an event for every entity available initially on the context
-broker.
+*   **Provide entity:** This operator sends an event thought this endpoint for
+    each entity update retrieved from the context broker. In addition to this, this
+    operator send an event for every entity available initially on the context
+    broker.
 
-  In any case, event data follows the format used by the NGSI API of WireCloud
-  for returning. E.g.
+    In any case, event data follows the format used by the NGSI API of WireCloud
+    for returning. E.g.
 
-    :::json
-    {
-        "id": "van4",
-        "type": "Van",
-        "current_position": "43.47173, -3.7967205"
-    }
+        :::json
+        {
+            "id": "van4",
+            "type": "Van",
+            "current_position": "43.47173, -3.7967205"
+        }
 
 
 References
