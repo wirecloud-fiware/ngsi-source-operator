@@ -1,9 +1,10 @@
-3.0.2
+3.0.3
 =====
 
 * Update FIWARE Lab URLs using the new schema (fiware.org instead of
   fi-ware.org)
 * Improved error control and improve log generation.
+* Added issue tracker metadata.
 
 3.0.1
 =====

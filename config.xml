@@ -12,6 +12,7 @@
         <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
         <doc>doc/userguide.md</doc>
         <changelog>doc/changelog.md</changelog>
+        <issuetracker>https://github.com/wirecloud-fiware/ngsi-source/issues</issuetracker>
     </details>
     <requirements>
         <feature name="NGSI"/>
