@@ -1,6 +1,3 @@
-NGSI Source Operator - User's Manual
-====================================
-
 Introduction
 ------------
 
@@ -38,36 +35,45 @@ Settings
   so this field cannot be empty.
 
 **NOTE:** Currently, the context broker instance available at
-http://orion.lab.fi-ware.org:1026 requires authentication, this make it unusable
+http://orion.lab.fiware.org:1026 requires authentication, this make it unusable
 from public workspaces. If you want to use the global context broker instance
 from a public workspaces, disable the uses of credentials and use the following
-URL for the NGSI server: http://orion.lab.fi-ware.org:10026. Take into account
+URL for the NGSI server: http://orion.lab.fiware.org:10026. Take into account
 that this URL is only enabled for work around those authentication problems and
 will be disabled in a near future providing a proper solution.
+
+**NOTE 2:** If you are using a custom instance of the Orion Context Broker, take
+into account that by default Orion doesn't support sending notifications to
+https endpoints. In those cases you can make use of a NGSI available through
+http at (http://ngsiproxy.lab.fiware.org) instead of using the default one that
+uses https (https://ngsiproxy.lab.fiware.org). Anyway, it is very recommended
+to enable the https support (see this
+[link](http://stackoverflow.com/questions/23338154/orion-context-broker-https-for-subscribers)
+for more info about this matter).
 
 Wiring
 ------
 
 Input Endpoints:
 
-* This widget has no output endpoint
+* This widget has no input endpoint
 
 Output Endpoints:
 
-* **Provide entity:** This operator sends an event thought this endpoint for
-each entity update retrieved from the context broker. In addition to this, this
-operator send an event for every entity available initially on the context
-broker.
+*   **Provide entity:** This operator sends an event thought this endpoint for
+    each entity update retrieved from the context broker. In addition to this, this
+    operator send an event for every entity available initially on the context
+    broker.
 
-  In any case, event data follows the format used by the NGSI API of WireCloud
-  for returning. E.g.
+    In any case, event data follows the format used by the NGSI API of WireCloud
+    for returning. E.g.
 
-    :::json
-    {
-        "id": "van4",
-        "type": "Van",
-        "current_position": "43.47173, -3.7967205"
-    }
+        :::json
+        {
+            "id": "van4",
+            "type": "Van",
+            "current_position": "43.47173, -3.7967205"
+        }
 
 
 References
@@ -75,4 +81,4 @@ References
 
 * [Orion Context Broker][orion]
 
-[orion]: http://catalogue.fi-ware.org/enablers/publishsubscribe-context-broker-orion-context-broker "Orion Context Broker info"
+[orion]: http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker "Orion Context Broker info"

@@ -1,0 +1,16 @@
+{
+    "browser": true,
+    "debug": false,
+    "devel": false,
+    "curly": true,
+    "eqnull": true,
+    "forin": false,
+    "undef": true,
+    "unused": "vars",
+    "prototypejs": false,
+    "strict": true,
+    "globals": {
+        "URL": false,
+        "MashupPlatform": true
+    }
+}

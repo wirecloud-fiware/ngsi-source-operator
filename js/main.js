@@ -1,5 +1,5 @@
 /*
- *     Copyright (c) 2013-2014 CoNWeT Lab., Universidad Politécnica de Madrid
+ *     Copyright (c) 2013-2015 CoNWeT Lab., Universidad Politécnica de Madrid
  *
  *     This file is part of the entity-service operator.
  *
@@ -98,12 +98,27 @@
             flat: true,
             onNotify: handlerReceiveEntity.bind(this),
             onSuccess: function (data) {
+                MashupPlatform.operator.log("Subscription created successfully (id: " + data.subscriptionId + ")", MashupPlatform.log.INFO);
                 this.subscriptionId = data.subscriptionId;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
                 window.addEventListener("beforeunload", function () {
-                    this.connection.cancelSubscription(this.subscriptionId);
+                    this.connection.cancelSubscription(this.subscriptionId, {
+                        onSuccess: function () {
+                            MashupPlatform.operator.log("Subscription cancelled sucessfully", MashupPlatform.log.INFO);
+                        },
+                        onFailure: function () {
+                            MashupPlatform.operator.log("Error cancelling current context broker subscription");
+                        }
+                    });
                 }.bind(this));
-            }.bind(this)
+            }.bind(this),
+            onFailure: function (e) {
+                if (e instanceof NGSI.ProxyConnectionError) {
+                    MashupPlatform.operator.log("Error connecting with the NGSI Proxy: " + e.cause.message);
+                } else {
+                    MashupPlatform.operator.log("Error creating subscription in the context broker server: " + e.message);
+                }
+            }
         };
         this.connection.createSubscription(entityIdList, attributeList, duration, throttling, notifyConditions, options);
     };
@@ -116,7 +131,14 @@
                 'type': 'ONCHANGE',
                 'condValues': MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
             }];
-            var options = {};
+            var options = {
+                onSuccess: function () {
+                    MashupPlatform.operator.log("Subscription refreshed sucessfully", MashupPlatform.log.INFO);
+                },
+                onFailure: function () {
+                    MashupPlatform.operator.log("Error refreshing current context broker subscription");
+                }
+            };
             this.connection.updateSubscription(this.subscriptionId, duration, throttling, notifyConditions, options);
         }
     };
@@ -140,6 +162,12 @@
 
         if (this.subscriptionId != null) {
             this.connection.cancelSubscription(this.subscriptionId, {
+                onSuccess: function () {
+                    MashupPlatform.operator.log("Old subscription has been cancelled sucessfully", MashupPlatform.log.INFO);
+                },
+                onFailure: function () {
+                    MashupPlatform.operator.log("Error cancelling old subscription", MashupPlatform.log.WARN);
+                },
                 onComplete: doInitialSubscription.bind(this)
             });
         } else {
