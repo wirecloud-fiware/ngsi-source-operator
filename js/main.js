@@ -44,12 +44,12 @@
 /********************************* PUBLIC *************************************/
 /******************************************************************************/
 
-    var NGSIEntityService = function NGSIEntityService() {
+    var NGSISource = function NGSISource() {
         this.connection = null; // The connection to NGSI.
         this.refresh_interval = null;
     };
 
-    NGSIEntityService.prototype.init = function init() {
+    NGSISource.prototype.init = function init() {
         // Set preference callbacks:
         MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
 
@@ -175,7 +175,7 @@
         }
     };
 
-    var entityService = new NGSIEntityService();
-    window.addEventListener("DOMContentLoaded", entityService.init.bind(entityService), false);
+    var ngsiSource = new NGSISource();
+    window.addEventListener("DOMContentLoaded", ngsiSource.init.bind(ngsiSource), false);
 
 })();
