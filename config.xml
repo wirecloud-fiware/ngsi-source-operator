@@ -8,8 +8,8 @@
         <image>images/catalogue.png</image>
         <description>Retrieve Orion Context Broker entities and their updates in real time.</description>
         <longdescription>DESCRIPTION.md</longdescription>
-        <license>AGPLv3+ w/linking exception</license>
-        <licenseurl>http://www.gnu.org/licenses/agpl-3.0.html</licenseurl>
+        <license>Apache License 2.0</license>
+        <licenseurl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseurl>
         <doc>doc/userguide.md</doc>
         <changelog>doc/changelog.md</changelog>
         <issuetracker>https://github.com/wirecloud-fiware/ngsi-source/issues</issuetracker>
