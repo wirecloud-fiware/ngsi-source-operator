@@ -1,55 +1,35 @@
 /*
- *     Copyright (c) 2013-2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2013-2015 CoNWeT Lab., Universidad Politécnica de Madrid
  *
- *     This file is part of the entity-service operator.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     entity-service is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Affero General Public License as published
- *     by the Free Software Foundation, either version 3 of the License, or (at
- *     your option) any later version.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     entity-service is distributed in the hope that it will be useful, but
- *     WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero
- *     General Public License for more details.
- *
- *     You should have received a copy of the GNU Affero General Public License
- *     along with entity-service. If not, see <http://www.gnu.org/licenses/>.
- *
- *     Linking this library statically or dynamically with other modules is
- *     making a combined work based on this library.  Thus, the terms and
- *     conditions of the GNU Affero General Public License cover the whole
- *     combination.
- *
- *     As a special exception, the copyright holders of this library give you
- *     permission to link this library with independent modules to produce an
- *     executable, regardless of the license terms of these independent
- *     modules, and to copy and distribute the resulting executable under
- *     terms of your choice, provided that you also meet, for each linked
- *     independent module, the terms and conditions of the license of that
- *     module.  An independent module is a module which is not derived from
- *     or based on this library.  If you modify this library, you may extend
- *     this exception to your version of the library, but you are not
- *     obligated to do so.  If you do not wish to do so, delete this
- *     exception statement from your version.
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 /*global MashupPlatform, NGSI */
 
 (function () {
 
     "use strict";
 
-/******************************************************************************/
-/********************************* PUBLIC *************************************/
-/******************************************************************************/
+    /******************************************************************************/
+    /********************************* PUBLIC *************************************/
+    /******************************************************************************/
 
-    var NGSIEntityService = function NGSIEntityService() {
+    var NGSISource = function NGSISource() {
         this.connection = null; // The connection to NGSI.
         this.refresh_interval = null;
     };
 
-    NGSIEntityService.prototype.init = function init() {
+    NGSISource.prototype.init = function init() {
         // Set preference callbacks:
         MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
 
@@ -57,9 +37,9 @@
         doInitialSubscription.call(this);
     };
 
-/******************************************************************************/
-/********************************* PRIVATE ************************************/
-/******************************************************************************/
+    /******************************************************************************/
+    /********************************* PRIVATE ************************************/
+    /******************************************************************************/
 
     var doInitialSubscription = function doInitialSubscription() {
 
@@ -67,8 +47,18 @@
 
         this.ngsi_server = MashupPlatform.prefs.get('ngsi_server');
         this.ngsi_proxy = MashupPlatform.prefs.get('ngsi_proxy');
+
+        var request_headers = {};
+
+        if (MashupPlatform.prefs.get('use_owner_credentials')) {
+            request_headers['X-FI-WARE-OAuth-Token'] = 'true';
+            request_headers['X-FI-WARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            request_headers['x-FI-WARE-OAuth-Source'] = 'workspaceowner';
+        }
+
         this.connection = new NGSI.Connection(this.ngsi_server, {
             use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token'),
+            request_headers: request_headers,
             ngsi_proxy_url: this.ngsi_proxy
         });
 
@@ -143,7 +133,7 @@
         }
     };
 
-/******************************** HANDLERS ************************************/
+    /******************************** HANDLERS ************************************/
 
     var handlerReceiveEntity = function handlerReceiveEntity(data) {
         for (var entityId in data.elements) {
@@ -151,7 +141,7 @@
         }
     };
 
-/**************************** Preference Handler *****************************/
+    /**************************** Preference Handler *****************************/
 
     var handlerPreferences = function handlerPreferences(new_values) {
 
@@ -175,7 +165,7 @@
         }
     };
 
-    var entityService = new NGSIEntityService();
-    window.addEventListener("DOMContentLoaded", entityService.init.bind(entityService), false);
+    var ngsiSource = new NGSISource();
+    window.addEventListener("DOMContentLoaded", ngsiSource.init.bind(ngsiSource), false);
 
 })();

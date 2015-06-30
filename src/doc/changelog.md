@@ -1,17 +1,25 @@
+3.0.4
+=====
+
+- New License: Apache 2
+- Experimental support for using the credentials of the dashboard owner. This
+  should provide a better experience for sharing workspaces in the future.
+- Add the link to the issue tracker into the metadata of the operator.
+
 3.0.3
 =====
 
-* Update FIWARE Lab URLs using the new schema (fiware.org instead of
+- Update FIWARE Lab URLs using the new schema (fiware.org instead of
   fi-ware.org)
-* Improved error control and improve log generation.
-* Added issue tracker metadata.
+- Improved error control and improve log generation.
+- Added issue tracker metadata.
 
 3.0.1
 =====
 
-* Added support for using the credentials of the user currently logged in
+- Added support for using the credentials of the user currently logged in
   WireCloud.
-* Updated the default NGSI proxy preference value so it points to the new NGSI
+- Updated the default NGSI proxy preference value so it points to the new NGSI
   proxy instance at FIWARE Lab. This pretends to fix problems raised by the use
   of port 3000 (e.g. firewalls may drop traffic using this port) and the ones
   raised by mixing contents comming from HTTP and HTTPS (browsers disallows
@@ -20,12 +28,12 @@
 3.0
 ===
 
-* Initial support for filtering entities by id (using ngsi regular expressions).
+- Initial support for filtering entities by id (using ngsi regular expressions).
 
 3.0a2
 =====
 
-* Initial user's guide
+- Initial user's guide
 
 3.0a1
 =====
