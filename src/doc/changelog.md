@@ -4,7 +4,6 @@
 - New License: Apache 2
 - Experimental support for using the credentials of the dashboard owner. This
   should provide a better experience for sharing workspaces in the future.
-- Add the link to the issue tracker into the metadata of the operator.
 
 3.0.3
 =====
