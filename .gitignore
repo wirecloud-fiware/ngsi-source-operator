@@ -1,7 +1,8 @@
 bower_components/
-src/lib/
 node_modules/
+src/bower_components/
+dist/
 build/
-/npm-debug.log
-/src/js/.tern-port
-/.tern-port
+_SpecRunner.html
+src/js/.tern-port
+.DS_Store
