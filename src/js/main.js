@@ -56,6 +56,11 @@
             request_headers['x-FI-WARE-OAuth-Source'] = 'workspaceowner';
         }
 
+        var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
+        if (tenant !== '') {
+            request_headers['FIWARE-Service'] = tenant;
+        }
+
         this.connection = new NGSI.Connection(this.ngsi_server, {
             use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token'),
             request_headers: request_headers,

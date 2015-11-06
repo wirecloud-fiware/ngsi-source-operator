@@ -1,20 +1,24 @@
-3.0.4
-=====
+## v3.0.5
+
+- Add support for the Orion Context Broker tenant/service feature
+
+
+## v3.0.4
 
 - New License: Apache 2
 - Experimental support for using the credentials of the dashboard owner. This
   should provide a better experience for sharing workspaces in the future.
 
-3.0.3
-=====
+
+## v3.0.3
 
 - Update FIWARE Lab URLs using the new schema (fiware.org instead of
   fi-ware.org)
 - Improved error control and improve log generation.
 - Added issue tracker metadata.
 
-3.0.1
-=====
+
+## v3.0.1
 
 - Added support for using the credentials of the user currently logged in
   WireCloud.
@@ -24,23 +28,23 @@
   raised by mixing contents comming from HTTP and HTTPS (browsers disallows
   contents coming from HTTP if the main web page uses HTTPS).
 
-3.0
-===
+
+## v3.0
 
 - Initial support for filtering entities by id (using ngsi regular expressions).
 
-3.0a2
-=====
+
+## v3.0a2
 
 - Initial user's guide
 
-3.0a1
-=====
+
+## 3.0a1
 
 * Improved operator's metadata/documentation
 
-2.99
-====
+
+## 2.99
 
 Initial entity-service operator release.
 
