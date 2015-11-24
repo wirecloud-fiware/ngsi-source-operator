@@ -62,7 +62,7 @@
         }
 
         var path = MashupPlatform.prefs.get('ngsi_service_path').trim().toLowerCase();
-        if (path !== '') {
+        if (path !== '' && path !== '/') {
             request_headers['FIWARE-ServicePath'] = path;
         }
 
