@@ -1,7 +1,12 @@
+## v3.0.6
+
+- Añadido soporte para la cabecera `Fiware-ServicePath` usada por el soporte
+  para tenant/servicios del Orion Context Broker
+
 ## v3.0.5
 
 - Añadido soporte para la funcionalidad de tenants/servicios del Orion Context
-  Broker tenant/service feature
+  Broker
 
 
 ## v3.0.4

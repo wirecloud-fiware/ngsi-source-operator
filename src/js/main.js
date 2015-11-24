@@ -61,6 +61,11 @@
             request_headers['FIWARE-Service'] = tenant;
         }
 
+        var path = MashupPlatform.prefs.get('ngsi_service_path').trim().toLowerCase();
+        if (path !== '') {
+            request_headers['FIWARE-ServicePath'] = path;
+        }
+
         this.connection = new NGSI.Connection(this.ngsi_server, {
             use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token'),
             request_headers: request_headers,
