@@ -1,7 +1,9 @@
 ## v3.0.6
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature
-  from the Orion Context Broker.
+  from the Orion Context Broker
+- Improved operator metadata
+
 
 ## v3.0.5
 
