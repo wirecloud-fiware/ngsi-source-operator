@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2013-2016 CoNWeT Lab., Universidad Politécnica de Madrid
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,11 +96,14 @@
         }];
         var options = {
             flat: true,
-            onNotify: handlerReceiveEntity.bind(this),
+            onNotify: function (data) {
+                handlerReceiveEntities.call(this, data.elements);
+            }.bind(this),
             onSuccess: function (data) {
                 MashupPlatform.operator.log("Subscription created successfully (id: " + data.subscriptionId + ")", MashupPlatform.log.INFO);
                 this.subscriptionId = data.subscriptionId;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
+                doInitialQueries.call(this, entityIdList);
                 window.addEventListener("beforeunload", function () {
                     this.connection.cancelSubscription(this.subscriptionId, {
                         onSuccess: function () {
@@ -143,9 +146,32 @@
         }
     };
 
-    /******************************** HANDLERS ************************************/
+    var requestInitialData = function requestInitialData(entities, page) {
+        this.connection.query(
+            entities,
+            null, // request all the attributes
+            {
+                details: true,
+                flat: true,
+                limit: 100,
+                offset: page * 100,
+                onSuccess: function (data, details) {
+                    handlerReceiveEntities.call(this, data);
+                    if (page < 100 && (page + 1) * 100 < details.count) {
+                        requestInitialData.call(this, entities, page + 1);
+                    }
+                },
+                onFailure: function () {
+                    MashupPlatform.operator.log("Error retrieving initial values");
+                }
+            });
+    };
 
-    var handlerReceiveEntity = function handlerReceiveEntity(data) {
+    var doInitialQueries = function doInitialQueries(entities) {
+        requestInitialData.call(this, entities, 0);
+    };
+
+    var handlerReceiveEntities = function handlerReceiveEntities(data) {
         for (var entityId in data.elements) {
             MashupPlatform.wiring.pushEvent("entityOutput", JSON.stringify(data.elements[entityId]));
         }

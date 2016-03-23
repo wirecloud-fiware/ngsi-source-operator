@@ -2,6 +2,10 @@
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature
   from the Orion Context Broker
+- Request initial data using `query` operations instead of relying on the
+  initial notification as this notification only provide 20 entities. Currently,
+  this operator will request 10000 entities as maximum using those initial
+  queries.
 - Improved operator metadata
 
 

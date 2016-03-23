@@ -2,6 +2,12 @@
 
 - Añadido soporte para la cabecera `Fiware-ServicePath` usada por el soporte
   para tenant/servicios del Orion Context Broker
+- Cambiado el mecanismo para obtener los datos iniciales, a partir de esta
+  versión se obtendran los datos usuando peticiones de consulta (`query`) en vez
+  de depender de la notification inicial, dado que esta solo proporciona 20
+  entidades como mucho. La implementación inicial solo pedirá 10000 entidades
+  como mucho a base de consultas.
+
 - Mejoras en los metadatos del operador
 
 
