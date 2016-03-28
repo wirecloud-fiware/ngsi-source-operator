@@ -2,6 +2,7 @@
   "vendor": "CoNWeT",
   "name": "ngsi-source",
   "version": "3.0.6",
+  "private": true,
   "description": "This repository contains a WireCloud widget. This package.json file is used only for installing the node dependencies",
   "devDependencies": {
     "grunt": "^0.4.5",
