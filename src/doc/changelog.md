@@ -1,3 +1,7 @@
+## v3.0.7
+
+- Fix bug in the initial queries
+
 ## v3.0.6
 
 - Add support for the `Fiware-ServicePath` used by the tenant/service feature

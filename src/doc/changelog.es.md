@@ -1,3 +1,7 @@
+## v3.0.7
+
+- Arreglado fallo en las consultas iniciales
+
 ## v3.0.6
 
 - Añadido soporte para la cabecera `Fiware-ServicePath` usada por el soporte

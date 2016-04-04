@@ -171,9 +171,9 @@
         requestInitialData.call(this, entities, 0);
     };
 
-    var handlerReceiveEntities = function handlerReceiveEntities(data) {
-        for (var entityId in data.elements) {
-            MashupPlatform.wiring.pushEvent("entityOutput", JSON.stringify(data.elements[entityId]));
+    var handlerReceiveEntities = function handlerReceiveEntities(elements) {
+        for (var entityId in elements) {
+            MashupPlatform.wiring.pushEvent("entityOutput", JSON.stringify(elements[entityId]));
         }
     };
 
