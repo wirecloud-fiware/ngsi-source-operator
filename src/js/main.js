@@ -51,9 +51,9 @@
         var request_headers = {};
 
         if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            request_headers['X-FI-WARE-OAuth-Token'] = 'true';
-            request_headers['X-FI-WARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            request_headers['x-FI-WARE-OAuth-Source'] = 'workspaceowner';
+            request_headers['X-FIWARE-OAuth-Token'] = 'true';
+            request_headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            request_headers['x-FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
         var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
