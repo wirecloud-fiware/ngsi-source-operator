@@ -1,5 +1,5 @@
 /*!
- *   Copyright 2014-2015 CoNWeT Lab., Universidad Politecnica de Madrid
+ *   Copyright 2014-2016 CoNWeT Lab., Universidad Politecnica de Madrid
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,13 +15,16 @@
  */
 
 
+var ConfigParser = require('wirecloud-config-parser');
+var parser = new ConfigParser('src/config.xml');
+
 module.exports = function (grunt) {
 
     'use strict';
 
     grunt.initConfig({
 
-        pkg: grunt.file.readJSON('package.json'),
+        metadata: parser.getData(),
 
         copy: {
             main: {
@@ -41,7 +44,7 @@ module.exports = function (grunt) {
             widget: {
                 options: {
                     mode: 'zip',
-                    archive: 'dist/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>.wgt'
+                    archive: 'dist/<%= metadata.vendor %>_<%= metadata.name %>_<%= metadata.version %>.wgt'
                 },
                 files: [
                     {
@@ -89,17 +92,6 @@ module.exports = function (grunt) {
             }
         },
 
-        replace: {
-            version: {
-                overwrite: true,
-                src: ['src/config.xml'],
-                replacements: [{
-                    from: /version=\"[0-9]+\.[0-9]+\.[0-9]+(-dev|a[0-9])?\"/g,
-                    to: 'version="<%= pkg.version %>"'
-                }]
-            }
-        },
-
         jscs: {
             widget: {
                 src: 'src/js/**/*',
@@ -136,7 +128,7 @@ module.exports = function (grunt) {
 
         wirecloud: {
             publish: {
-                file: 'build/<%= pkg.vendor %>_<%= pkg.name %>_<%= pkg.version %>-dev.wgt'
+                file: 'build/<%= metadata.vendor %>_<%= metadata.name %>_<%= metadata.version %>.wgt'
             }
         }
 
@@ -149,7 +141,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks("grunt-jscs");
     grunt.loadNpmTasks('grunt-strip-code');
-    grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
         'jshint:grunt',
@@ -157,13 +148,16 @@ module.exports = function (grunt) {
         'jscs'
     ]);
 
-    grunt.registerTask('default', [
-        'test',
+    grunt.registerTask('build', [
         'clean:temp',
         'copy:main',
         'strip_code',
-        'replace:version',
         'compress:widget'
+    ]);
+
+    grunt.registerTask('default', [
+        'test',
+        'build'
     ]);
 
     grunt.registerTask('publish', [
