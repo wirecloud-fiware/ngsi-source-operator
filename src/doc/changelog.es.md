@@ -1,3 +1,7 @@
+## v3.0.8 (2016-12-12)
+
+- Actualizadas los nombres de las cabeceras para las credenciales
+
 ## v3.0.7
 
 - Arreglado fallo en las consultas iniciales

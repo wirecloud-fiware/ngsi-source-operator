@@ -1,3 +1,7 @@
+## v3.0.8 (2016-12-12)
+
+- Use up to date credentials header names
+
 ## v3.0.7
 
 - Fix bug in the initial queries
