@@ -33,11 +33,11 @@ Settings
   WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can
   change the way to use it making this option not funcional and requiring you to
   upgrade this operator.
-- **NGSI tenant/service**: Tenant/service to use when connecting to the context
+- **Tenant**: Tenant/service to use when connecting to the context
   broker. Must be a string of alphanumeric characters (lowercase) and the `_`
   symbol. Maximum length is 50 characters. If empty, the default tenant will be
   used
-- **NGSI scope**: Scope/path to use when connecting to the context broker. Must
+- **Service path**: Scope/path to use when connecting to the context broker. Must
   be a string of alphanumeric characters (lowercase) and the `_` symbol
   separated by `/` slashes. Maximum length is 50 characters. If empty, the
   default service path will be used: `/`
