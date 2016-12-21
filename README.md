@@ -27,7 +27,7 @@ Install other npm dependencies by running:
 npm install
 ```
 
-For build the widget you need download grunt:
+For build the operator you need download grunt:
 
 ```bash
 sudo npm install -g grunt-cli
