@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2013-2017 CoNWeT Lab., Universidad Politécnica de Madrid
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,10 +30,26 @@
     };
 
     NGSISource.prototype.init = function init() {
-        // Set preference callbacks:
+        // Set preference callbacks
         MashupPlatform.prefs.registerCallback(handlerPreferences.bind(this));
 
-        // Create NGSI conection:
+        // Set beforeunload listener
+        window.addEventListener("beforeunload", () => {
+            if (this.subscriptionId == null) {
+                return;
+            }
+
+            this.connection.v2.deleteSubscription(this.subscriptionId).then(
+                () => {
+                    MashupPlatform.operator.log("Subscription cancelled sucessfully", MashupPlatform.log.INFO);
+                },
+                () => {
+                    MashupPlatform.operator.log("Error cancelling current context broker subscription");
+                }
+            );
+        });
+
+        // Create NGSI conection
         doInitialSubscription.call(this);
     };
 
@@ -51,9 +67,9 @@
         var request_headers = {};
 
         if (MashupPlatform.prefs.get('use_owner_credentials')) {
-            request_headers['X-FIWARE-OAuth-Token'] = 'true';
-            request_headers['X-FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
-            request_headers['x-FIWARE-OAuth-Source'] = 'workspaceowner';
+            request_headers['FIWARE-OAuth-Token'] = 'true';
+            request_headers['FIWARE-OAuth-Header-Name'] = 'X-Auth-Token';
+            request_headers['FIWARE-OAuth-Source'] = 'workspaceowner';
         }
 
         var tenant = MashupPlatform.prefs.get('ngsi_tenant').trim().toLowerCase();
@@ -72,99 +88,91 @@
             ngsi_proxy_url: this.ngsi_proxy
         });
 
-        var types = MashupPlatform.prefs.get('ngsi_entities').split(new RegExp(',\\s*'));
-        var entityIdList = [];
-        var entityId;
-        var id_pattern = MashupPlatform.prefs.get('ngsi_id_filter');
+        var types = MashupPlatform.prefs.get('ngsi_entities').trim().replace(/,+\s+/g, ',');
+        if (types === '') {
+            types = undefined;
+        }
+
+        var id_pattern = MashupPlatform.prefs.get('ngsi_id_filter').trim();
         if (id_pattern === '') {
             id_pattern = '.*';
         }
-        for (var i = 0; i < types.length; i++) {
-            entityId = {
-                id: id_pattern,
-                type: types[i],
-                isPattern: true
-            };
-            entityIdList.push(entityId);
-        }
-        var attributeList = null;
-        var duration = 'PT3H';
-        var throttling = null;
-        var notifyConditions = [{
-            'type': 'ONCHANGE',
-            'condValues': MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
-        }];
-        var options = {
-            flat: true,
-            onNotify: function (data) {
-                handlerReceiveEntities.call(this, data.elements);
-            }.bind(this),
-            onSuccess: function (data) {
-                MashupPlatform.operator.log("Subscription created successfully (id: " + data.subscriptionId + ")", MashupPlatform.log.INFO);
-                this.subscriptionId = data.subscriptionId;
+
+        var entities = {
+            idPattern: id_pattern,
+            type: types
+        };
+        this.connection.v2.createSubscription({
+            description: "ngsi source subscription",
+            subject: {
+                entities: [entities],
+                condition: {
+                    attrs: MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
+                }
+            },
+            notification: {
+                callback: (data) => {
+                    handlerReceiveEntities.call(this, data.elements);
+                }
+            },
+            expires: moment().add('3', 'hours').toISOString(),
+            throttling: 2
+        }, {
+            keyValues: true,
+        }).then(
+            (response) => {
+                MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
+                this.subscriptionId = response.subscription.id;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
-                doInitialQueries.call(this, entityIdList);
-                window.addEventListener("beforeunload", function () {
-                    this.connection.cancelSubscription(this.subscriptionId, {
-                        onSuccess: function () {
-                            MashupPlatform.operator.log("Subscription cancelled sucessfully", MashupPlatform.log.INFO);
-                        },
-                        onFailure: function () {
-                            MashupPlatform.operator.log("Error cancelling current context broker subscription");
-                        }
-                    });
-                }.bind(this));
-            }.bind(this),
-            onFailure: function (e) {
+                doInitialQueries.call(this, entities);
+            },
+            (e) => {
                 if (e instanceof NGSI.ProxyConnectionError) {
                     MashupPlatform.operator.log("Error connecting with the NGSI Proxy: " + e.cause.message);
                 } else {
                     MashupPlatform.operator.log("Error creating subscription in the context broker server: " + e.message);
                 }
             }
-        };
-        this.connection.createSubscription(entityIdList, attributeList, duration, throttling, notifyConditions, options);
+        );
     };
 
     var refreshNGSISubscription = function refreshNGSISubscription() {
         if (this.subscriptionId) {
-            var duration = 'PT3H';
-            var throttling = null;
-            var notifyConditions = [{
-                'type': 'ONCHANGE',
-                'condValues': MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
-            }];
-            var options = {
-                onSuccess: function () {
+            this.connection.v2.updateSubscription({
+                id: this.subscriptionId,
+                expires: moment().add('3', 'hours').toISOString()
+            }).then(
+                () => {
                     MashupPlatform.operator.log("Subscription refreshed sucessfully", MashupPlatform.log.INFO);
                 },
-                onFailure: function () {
+                () => {
                     MashupPlatform.operator.log("Error refreshing current context broker subscription");
                 }
-            };
-            this.connection.updateSubscription(this.subscriptionId, duration, throttling, notifyConditions, options);
+            );
         }
     };
 
     var requestInitialData = function requestInitialData(entities, page) {
-        this.connection.query(
-            entities,
-            null, // request all the attributes
+        return this.connection.v2.listEntities(
             {
-                details: true,
-                flat: true,
+                idPattern: entities.idPattern,
+                type: entities.type,
+                count: true,
+                keyValues: true,
                 limit: 100,
-                offset: page * 100,
-                onSuccess: function (data, details) {
-                    handlerReceiveEntities.call(this, data);
-                    if (page < 100 && (page + 1) * 100 < details.count) {
-                        requestInitialData.call(this, entities, page + 1);
-                    }
-                },
-                onFailure: function () {
-                    MashupPlatform.operator.log("Error retrieving initial values");
+                offset: page * 100
+            }
+        ).then(
+            (response) => {
+                handlerReceiveEntities.call(this, response.results);
+                if (page < 100 && (page + 1) * 100 < response.count) {
+                    return requestInitialData.call(this, entities, page + 1);
                 }
-            });
+            },
+            () => {
+                MashupPlatform.operator.log("Error retrieving initial values");
+            }
+        );
     };
 
     var doInitialQueries = function doInitialQueries(entities) {
@@ -187,15 +195,16 @@
         }
 
         if (this.subscriptionId != null) {
-            this.connection.cancelSubscription(this.subscriptionId, {
-                onSuccess: function () {
+            this.connection.v2.deleteSubscription(this.subscriptionId).then(
+                () => {
                     MashupPlatform.operator.log("Old subscription has been cancelled sucessfully", MashupPlatform.log.INFO);
+                    doInitialSubscription.call(this);
                 },
-                onFailure: function () {
+                () => {
                     MashupPlatform.operator.log("Error cancelling old subscription", MashupPlatform.log.WARN);
-                },
-                onComplete: doInitialSubscription.bind(this)
-            });
+                    doInitialSubscription.call(this);
+                }
+            );
         } else {
             doInitialSubscription.call(this);
         }
