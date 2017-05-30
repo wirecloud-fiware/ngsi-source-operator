@@ -32,6 +32,7 @@
         <outputendpoint name="entityOutput" type="text" label="Provide entity" description="Every change over each entity fires an event" friendcode="entity"/>
     </wiring>
     <scripts>
+        <script src="lib/js/moment-with-locales.min.js"/>
         <script src="js/main.js"/>
     </scripts>
 

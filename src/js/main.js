@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* globals MashupPlatform, NGSI */
+/* globals MashupPlatform, moment, NGSI */
 
 (function () {
 
