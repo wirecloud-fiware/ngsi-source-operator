@@ -98,21 +98,28 @@
             id_pattern = '.*';
         }
 
-        var entities = {
-            idPattern: id_pattern,
-            type: types
-        };
+        var entities = [];
+        if (types != null) {
+            entities = types.split(',').map((type) => {
+                return {
+                    idPattern: id_pattern,
+                    type: type
+                };
+            });
+        }
+
         this.connection.v2.createSubscription({
             description: "ngsi source subscription",
             subject: {
-                entities: [entities],
+                entities: entities,
                 condition: {
                     attrs: MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
                 }
             },
             notification: {
-                callback: (data) => {
-                    handlerReceiveEntities.call(this, data.elements);
+                attrsFormat: "keyValues",
+                callback: (notification) => {
+                    handlerReceiveEntities.call(this, notification.data);
                 }
             },
             expires: moment().add('3', 'hours').toISOString(),
@@ -124,7 +131,7 @@
                 MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
                 this.subscriptionId = response.subscription.id;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
-                doInitialQueries.call(this, entities);
+                doInitialQueries.call(this, id_pattern, types);
             },
             (e) => {
                 if (e instanceof NGSI.ProxyConnectionError) {
@@ -152,11 +159,11 @@
         }
     };
 
-    var requestInitialData = function requestInitialData(entities, page) {
+    var requestInitialData = function requestInitialData(idPattern, types, page) {
         return this.connection.v2.listEntities(
             {
-                idPattern: entities.idPattern,
-                type: entities.type,
+                idPattern: idPattern,
+                type: types,
                 count: true,
                 keyValues: true,
                 limit: 100,
@@ -166,7 +173,7 @@
             (response) => {
                 handlerReceiveEntities.call(this, response.results);
                 if (page < 100 && (page + 1) * 100 < response.count) {
-                    return requestInitialData.call(this, entities, page + 1);
+                    return requestInitialData.call(this, idPattern, types, page + 1);
                 }
             },
             () => {
@@ -175,8 +182,8 @@
         );
     };
 
-    var doInitialQueries = function doInitialQueries(entities) {
-        requestInitialData.call(this, entities, 0);
+    var doInitialQueries = function doInitialQueries(idPattern, types) {
+        requestInitialData.call(this, idPattern, types, 0);
     };
 
     var handlerReceiveEntities = function handlerReceiveEntities(elements) {
