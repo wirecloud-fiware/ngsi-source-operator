@@ -144,8 +144,7 @@
                         handlerReceiveEntities.call(this, notification.data);
                     }
                 },
-                expires: moment().add('3', 'hours').toISOString(),
-                throttling: 2
+                expires: moment().add('3', 'hours').toISOString()
             }, {
                 keyValues: true,
             }).then(
