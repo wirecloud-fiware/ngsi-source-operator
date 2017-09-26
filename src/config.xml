@@ -30,7 +30,7 @@
         <preference name="ngsi_update_attributes" type="text" label="Monitored NGSI Attributes" description="Attributes to monitor for updates. Currently, the Orion Context Broker requires a list of attributes to monitor for changes, so this field cannot be empty." default="Latitud, Longitud, presence, batteryCharge, illuminance, ActivePower, ReactivePower, electricPotential, electricalCurrent"/>
     </preferences>
     <wiring>
-        <outputendpoint name="entityOutput" type="text" label="Provide entity" description="Every change over each entity fires an event" friendcode="entity"/>
+        <outputendpoint name="entityOutput" type="text" label="Entities" description="Initial entity values and entity updates" friendcode="entity-list"/>
     </wiring>
     <scripts>
         <script src="lib/js/moment-with-locales.min.js"/>

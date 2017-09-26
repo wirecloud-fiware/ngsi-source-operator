@@ -201,9 +201,7 @@
     };
 
     var handlerReceiveEntities = function handlerReceiveEntities(elements) {
-        for (var entityId in elements) {
-            MashupPlatform.wiring.pushEvent("entityOutput", JSON.stringify(elements[entityId]));
-        }
+        MashupPlatform.wiring.pushEvent("entityOutput", elements);
     };
 
     /* *************************** Preference Handler *****************************/
