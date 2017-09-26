@@ -99,61 +99,71 @@
         }
 
         var filter = MashupPlatform.prefs.get('query').trim();
+        var attrs = MashupPlatform.prefs.get('ngsi_update_attributes').trim();
         if (filter === '') {
             filter = undefined;
         }
 
-        var expression = undefined;
+        var condition = undefined;
+        if (filter != null || attrs !== "") {
+            condition = {};
+        }
+        if (attrs !== "") {
+            condition.attrs = attrs.split(new RegExp(',\\s*'));
+        }
         if (filter != null) {
-            expression = {
+            condition.expression = {
                 q: filter
             };
         }
 
-        var entities = [];
-        if (types != null) {
-            entities = types.split(',').map((type) => {
-                return {
-                    idPattern: id_pattern,
-                    type: type
-                };
-            });
-        }
-
-        this.connection.v2.createSubscription({
-            description: "ngsi source subscription",
-            subject: {
-                entities: entities,
-                condition: {
-                    attrs: MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*')),
-                    expression: expression
-                }
-            },
-            notification: {
-                attrsFormat: "keyValues",
-                callback: (notification) => {
-                    handlerReceiveEntities.call(this, notification.data);
-                }
-            },
-            expires: moment().add('3', 'hours').toISOString(),
-            throttling: 2
-        }, {
-            keyValues: true,
-        }).then(
-            (response) => {
-                MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
-                this.subscriptionId = response.subscription.id;
-                this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
-                doInitialQueries.call(this, id_pattern, types, filter);
-            },
-            (e) => {
-                if (e instanceof NGSI.ProxyConnectionError) {
-                    MashupPlatform.operator.log("Error connecting with the NGSI Proxy: " + e.cause.message);
-                } else {
-                    MashupPlatform.operator.log("Error creating subscription in the context broker server: " + e.message);
-                }
+        if (attrs === "") {
+            doInitialQueries.call(this, id_pattern, types, filter);
+        } else {
+            var entities = [];
+            if (types != null) {
+                entities = types.split(',').map((type) => {
+                    return {
+                        idPattern: id_pattern,
+                        type: type
+                    };
+                });
+            } else {
+                entities.push({idPattern: id_pattern});
             }
-        );
+
+            this.connection.v2.createSubscription({
+                description: "ngsi source subscription",
+                subject: {
+                    entities: entities,
+                    condition: condition
+                },
+                notification: {
+                    attrsFormat: "keyValues",
+                    callback: (notification) => {
+                        handlerReceiveEntities.call(this, notification.data);
+                    }
+                },
+                expires: moment().add('3', 'hours').toISOString(),
+                throttling: 2
+            }, {
+                keyValues: true,
+            }).then(
+                (response) => {
+                    MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
+                    this.subscriptionId = response.subscription.id;
+                    this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
+                    doInitialQueries.call(this, id_pattern, types, filter);
+                },
+                (e) => {
+                    if (e instanceof NGSI.ProxyConnectionError) {
+                        MashupPlatform.operator.log("Error connecting with the NGSI Proxy: " + e.cause.message);
+                    } else {
+                        MashupPlatform.operator.log("Error creating subscription in the context broker server: " + e.message);
+                    }
+                }
+            );
+        }
     };
 
     var refreshNGSISubscription = function refreshNGSISubscription() {
