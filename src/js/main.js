@@ -98,6 +98,18 @@
             id_pattern = '.*';
         }
 
+        var filter = MashupPlatform.prefs.get('query').trim();
+        if (filter === '') {
+            filter = undefined;
+        }
+
+        var expression = undefined;
+        if (filter != null) {
+            expression = {
+                q: filter
+            };
+        }
+
         var entities = [];
         if (types != null) {
             entities = types.split(',').map((type) => {
@@ -113,7 +125,8 @@
             subject: {
                 entities: entities,
                 condition: {
-                    attrs: MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*'))
+                    attrs: MashupPlatform.prefs.get('ngsi_update_attributes').split(new RegExp(',\\s*')),
+                    expression: expression
                 }
             },
             notification: {
@@ -131,7 +144,7 @@
                 MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
                 this.subscriptionId = response.subscription.id;
                 this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
-                doInitialQueries.call(this, id_pattern, types);
+                doInitialQueries.call(this, id_pattern, types, filter);
             },
             (e) => {
                 if (e instanceof NGSI.ProxyConnectionError) {
@@ -159,7 +172,7 @@
         }
     };
 
-    var requestInitialData = function requestInitialData(idPattern, types, page) {
+    var requestInitialData = function requestInitialData(idPattern, types, filter, page) {
         return this.connection.v2.listEntities(
             {
                 idPattern: idPattern,
@@ -167,13 +180,14 @@
                 count: true,
                 keyValues: true,
                 limit: 100,
-                offset: page * 100
+                offset: page * 100,
+                q: filter
             }
         ).then(
             (response) => {
                 handlerReceiveEntities.call(this, response.results);
                 if (page < 100 && (page + 1) * 100 < response.count) {
-                    return requestInitialData.call(this, idPattern, types, page + 1);
+                    return requestInitialData.call(this, idPattern, types, filter, page + 1);
                 }
             },
             () => {
@@ -182,8 +196,8 @@
         );
     };
 
-    var doInitialQueries = function doInitialQueries(idPattern, types) {
-        requestInitialData.call(this, idPattern, types, 0);
+    var doInitialQueries = function doInitialQueries(idPattern, types, filter) {
+        requestInitialData.call(this, idPattern, types, filter, 0);
     };
 
     var handlerReceiveEntities = function handlerReceiveEntities(elements) {
