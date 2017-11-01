@@ -11,7 +11,7 @@ can make use of it on the [Mashup portal](https://mashup.lab.fiware.org).
 Remember to take a look into the example mashups provided in the OrionStarterKit offering.
 
 
-## Build
+## Build
 
 Be sure to have installed [Node.js](http://node.js). For example, you can install it on Ubuntu and Debian running the following commands:
 

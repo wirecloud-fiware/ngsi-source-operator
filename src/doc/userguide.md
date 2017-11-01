@@ -29,25 +29,25 @@ Settings
   "Use the FIWARE credentials of the workspace owner" preference.
 - **Use the FIWARE credentials of the dashboard owner**: Use the FIWARE
   credentials of the owner of the workspace. This preference takes preference
-  over "Use the FIWARE credentials of the user". This feature is available on
-  WireCloud 0.7.0+ in a experimental basis, future versions of WireCloud can
-  change the way to use it making this option not funcional and requiring you to
-  upgrade this operator.
+  over "Use the FIWARE credentials of the user".
 - **Tenant**: Tenant/service to use when connecting to the context
   broker. Must be a string of alphanumeric characters (lowercase) and the `_`
   symbol. Maximum length is 50 characters. If empty, the default tenant will be
-  used
+  used.
 - **Service path**: Scope/path to use when connecting to the context broker. Must
   be a string of alphanumeric characters (lowercase) and the `_` symbol
   separated by `/` slashes. Maximum length is 50 characters. If empty, the
   default service path will be used: `/`
 - **NGSI entity types:** A comma separated list of entity types to use for
-  filtering entities from the Orion Context broker. This field cannot be empty.
+  filtering entities from the Orion Context broker. Leave this field empty If
+  you don't want to filter entities by type.
 - **Id pattern:** Id pattern for filtering entities. This preference can be
   empty, in that case, entities won't be filtered by id.
-- **Monitored NGSI Attributes:** Attributes to monitor for updates. Currently,
-  the Orion Context Broker requires a list of attributes to monitor for changes,
-  so this field cannot be empty.
+- **Query:** Filter entities by providing a query using the Simple Query
+  Language.
+- **Monitored NGSI Attributes:** Attributes to monitor for updates. those
+  changes are tracked by creating a subscription inside the context broker. If
+  this list is empty, that subscription won't be created.
 
 **NOTE** If you are using a custom instance of the Orion Context Broker, take
 into account that by default Orion doesn't support sending notifications to

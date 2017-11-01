@@ -1,3 +1,10 @@
+## v4.0.0 (2017-11-xx)
+
+- Updated to use NGSIv2 (NGSIv1 support dropped)
+- Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
+  some problems with some services using the context broker
+- Improved documentation
+
 ## v3.0.8 (2016-12-12)
 
 - Use up to date credentials header names
