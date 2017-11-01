@@ -238,6 +238,10 @@
         }
     };
 
+    /* import-block */
+    window.NGSISource = NGSISource;
+    /* end-import-block */
+
     var ngsiSource = new NGSISource();
     window.addEventListener("DOMContentLoaded", ngsiSource.init.bind(ngsiSource), false);
 
