@@ -27,6 +27,7 @@
     var NGSISource = function NGSISource() {
         this.connection = null; // The connection to NGSI.
         this.refresh_interval = null;
+        this.query_task = null;
     };
 
     NGSISource.prototype.init = function init() {
@@ -35,6 +36,11 @@
 
         // Set beforeunload listener
         window.addEventListener("beforeunload", () => {
+            if (this.query_task != null) {
+                this.query_task.abort(null, true);
+                this.query_task = null;
+            }
+
             if (this.subscriptionId == null) {
                 return;
             }
@@ -206,7 +212,7 @@
     };
 
     var doInitialQueries = function doInitialQueries(idPattern, types, filter) {
-        requestInitialData.call(this, idPattern, types, filter, 0);
+        this.query_task = requestInitialData.call(this, idPattern, types, filter, 0);
     };
 
     var handlerReceiveEntities = function handlerReceiveEntities(elements) {
@@ -220,6 +226,11 @@
         if (this.refresh_interval) {
             clearInterval(this.refresh_interval);
             this.refresh_interval = null;
+        }
+
+        if (this.query_task != null) {
+            this.query_task.abort(null, true);
+            this.query_task = null;
         }
 
         if (this.subscriptionId != null) {
