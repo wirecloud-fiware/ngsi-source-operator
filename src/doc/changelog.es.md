@@ -1,3 +1,11 @@
+## v4.0.0 (2017-11-xx)
+
+- Actualizado el operador para usar NGSIv2 (el soporte para NGSIv1 se ha
+  eliminado)
+- Ya no se convierten en minúsculas los valores de las cabeceras
+  `FIWARE-Service` y `FIWARE-ServicePath`, dado que está dando problemas.
+- Mejoras en la documentación
+
 ## v3.0.8 (2016-12-12)
 
 - Actualizadas los nombres de las cabeceras para las credenciales

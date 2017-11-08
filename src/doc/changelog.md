@@ -2,7 +2,7 @@
 
 - Updated to use NGSIv2 (NGSIv1 support dropped)
 - Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
-  some problems with some services using the context broker
+  some problems
 - Improved documentation
 
 ## v3.0.8 (2016-12-12)
