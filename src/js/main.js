@@ -55,6 +55,13 @@
             );
         });
 
+        // Set wiring status callback
+        MashupPlatform.wiring.registerStatusCallback(() => {
+            if (this.connection == null) {
+                doInitialSubscription.call(this);
+            }
+        });
+
         // Create NGSI conection
         doInitialSubscription.call(this);
     };
@@ -66,6 +73,11 @@
     var doInitialSubscription = function doInitialSubscription() {
 
         this.subscriptionId = null;
+        this.connection = null;
+
+        if (!MashupPlatform.operator.outputs.entityOutput.connected) {
+            return;
+        }
 
         this.ngsi_server = MashupPlatform.prefs.get('ngsi_server');
         this.ngsi_proxy = MashupPlatform.prefs.get('ngsi_proxy');
@@ -90,7 +102,7 @@
 
         this.connection = new NGSI.Connection(this.ngsi_server, {
             use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token'),
-            request_headers: request_headers,
+            headers: request_headers,
             ngsi_proxy_url: this.ngsi_proxy
         });
 
