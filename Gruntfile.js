@@ -128,7 +128,7 @@ module.exports = function (grunt) {
                         dir: 'build/coverage'
                     },
                     files: [
-                        'node_modules/mock-applicationmashup/lib/vendor/mockMashupPlatform.js',
+                        'node_modules/mock-applicationmashup/dist/MockMP.js',
                         'src/js/*.js',
                         'tests/js/*Spec.js'
                     ],
