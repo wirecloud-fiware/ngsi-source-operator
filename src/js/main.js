@@ -102,7 +102,7 @@
 
         this.connection = new NGSI.Connection(this.ngsi_server, {
             use_user_fiware_token: MashupPlatform.prefs.get('use_user_fiware_token'),
-            headers: request_headers,
+            request_headers: request_headers,
             ngsi_proxy_url: this.ngsi_proxy
         });
 
