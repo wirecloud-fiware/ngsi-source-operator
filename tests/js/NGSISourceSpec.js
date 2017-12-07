@@ -115,6 +115,49 @@
             }, 0);
         });
 
+        it("connect on init (multiple entity pages)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+
+            entity_pages = [
+                {
+                    // We are not going to provide 150 entities, but code is
+                    // not checking the returned number of entities
+                    count: 150,
+                    results: [
+                        {id: "1", attr1: 5},
+                        {id: "2", attr2: false},
+                        {id: "3", attr1: []},
+                    ]
+                },
+                {
+                    count: 150,
+                    results: [
+                        {id: "4", attr3: 5},
+                        {id: "5", attr1: false},
+                        {id: "6", attr2: []},
+                    ]
+                }
+            ];
+            operator.init();
+
+            expect(operator.connection).not.toEqual(null);
+            expect(NGSI.Connection).toHaveBeenCalledWith('https://orion.example.com', {
+                ngsi_proxy_url: 'https://ngsiproxy.example.com',
+                request_headers: {
+                    'FIWARE-Service': 'Tenant',
+                    'FIWARE-ServicePath': '/Spain/Madrid'
+                },
+                use_user_fiware_token: false
+            });
+
+            // Wait until it process the initial entities
+            setTimeout(() => {
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", entity_pages[0].results);
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", entity_pages[1].results);
+                done();
+            }, 0);
+        });
+
         it("connect (empty service)", () => {
             MashupPlatform.operator.outputs.entityOutput.connect(true);
             MashupPlatform.prefs.set('ngsi_tenant', '');
