@@ -83,6 +83,16 @@
             expect(NGSI.Connection).not.toHaveBeenCalled();
         });
 
+        it("connects on wiring change", () => {
+            operator.init();
+
+            expect(operator.connection).toEqual(null);
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.wiring.registerStatusCallback.calls.mostRecent().args[0]();
+
+            expect(operator.connection).not.toEqual(null);
+        });
+
         it("connect on init", (done) => {
             MashupPlatform.operator.outputs.entityOutput.connect(true);
 
@@ -113,6 +123,16 @@
                 expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", entity_pages[0].results);
                 done();
             }, 0);
+        });
+
+        it("should ignore wiring change events if already connected", () => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            operator.init();
+
+            var initial_connection = operator.connection;
+            MashupPlatform.wiring.registerStatusCallback.calls.mostRecent().args[0]();
+
+            expect(operator.connection).toBe(initial_connection);
         });
 
         it("connect on init (multiple entity pages)", (done) => {
@@ -188,6 +208,80 @@
                 },
                 use_user_fiware_token: false
             });
+        });
+
+        it("connect (types + subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_entities', 'AirQualityObserved, WeatherForecast');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.type).toEqual("AirQualityObserved,WeatherForecast");
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.subject.entities).toEqual([
+                    {idPattern: '.*', type: 'AirQualityObserved'},
+                    {idPattern: '.*', type: 'WeatherForecast'}
+                ]);
+
+                done();
+            }, 0);
+        });
+
+        it("connect (idPattern + subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_id_filter', 'a.*b');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.idPattern).toEqual("a.*b");
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.subject.entities).toEqual([
+                    {idPattern: 'a.*b'}
+                ]);
+
+                done();
+            }, 0);
+        });
+
+        it("connect (query + subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('query', 'temperature<=20');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.q).toEqual("temperature<=20");
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.subject.condition).toEqual({
+                    attrs: ['location'],
+                    expression: {q: "temperature<=20"}
+                });
+
+                done();
+            }, 0);
         });
 
         it("updates ngsi connection on prefs change", () => {
