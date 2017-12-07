@@ -122,6 +122,12 @@ module.exports = function (grunt) {
 
         karma: {
             options: {
+                customLaunchers: {
+                    ChromeNoSandbox: {
+                        base: "Chrome",
+                        flags: ['--no-sandbox']
+                    }
+                },
                 files: [
                     'node_modules/mock-applicationmashup/dist/MockMP.js',
                     'src/js/*.js',
