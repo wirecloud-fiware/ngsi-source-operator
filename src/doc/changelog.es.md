@@ -1,10 +1,19 @@
-## v4.0.0 (2017-11-xx)
+## v4.0.0 (2017-12-07)
 
 - Actualizado el operador para usar NGSIv2 (el soporte para NGSIv1 se ha
   eliminado)
 - Ya no se convierten en minúsculas los valores de las cabeceras
   `FIWARE-Service` y `FIWARE-ServicePath`, dado que está dando problemas.
 - Mejoras en la documentación
+- A partir de ahora solo se creará una subscripción si el usuario configura
+  algún atributo para monitorizar
+- Las conexiones con el context broker solo se realizarán cuando el puerto de
+  salida del operador esté conectado
+- A partir de ahora las peticiones para obtener los valores inicial se
+  cancelarán si el usuario cambia las preferencias del operador antes de que
+  estas se completen.
+- Conjunto inicial de tests usando Karma y Travis CI
+
 
 ## v3.0.8 (2016-12-12)
 

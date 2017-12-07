@@ -1,9 +1,15 @@
-## v4.0.0 (2017-11-xx)
+## v4.0.0 (2017-12-07)
 
 - Updated to use NGSIv2 (NGSIv1 support dropped)
 - Use case sensitive `FIWARE-Service` and `FIWARE-ServicePath` values to fix
   some problems
 - Improved documentation
+- Only create a subscription if the user configures attributes to monitor
+- Connect to the context broker only after connecting the output endpoint
+- Abort initial queries if the user changes operator preferences before
+  retrieving initial values using previous configuration
+- Initial test set using Karma and Travis CI
+
 
 ## v3.0.8 (2016-12-12)
 
