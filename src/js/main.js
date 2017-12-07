@@ -256,6 +256,8 @@
                     doInitialSubscription.call(this);
                 }
             );
+            // Remove subscriptionId without waiting to know if the operator finished successfully
+            this.subscriptionId = null;
         } else {
             doInitialSubscription.call(this);
         }

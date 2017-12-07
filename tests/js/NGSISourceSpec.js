@@ -6,7 +6,7 @@
 
     describe("NGSI Source operator should", function () {
 
-        var operator, abort_mock;
+        var operator, abort_mock, entity_pages, entity_page_i;
 
         beforeAll(function () {
             window.MashupPlatform = new MockMP({
@@ -32,6 +32,8 @@
             MashupPlatform.resetData();
             operator = new NGSISource();
             abort_mock = jasmine.createSpy('abort');
+            entity_pages = [{results: [], cout: 0}];
+            entity_page_i = 0;
             window.NGSI = {
                 Connection: jasmine.createSpy('NGSI').and.callFake(function () {
                     this.v2 = {
@@ -42,11 +44,18 @@
                             return Promise.resolve();
                         }),
                         listEntities: jasmine.createSpy('listEntities').and.callFake(function () {
-                            var p = Promise.resolve();
-                            p.then = () => {
-                                return {abort: abort_mock};
+                            var i = entity_page_i++;
+                            if (entity_page_i == entity_pages.length) {
+                                entity_page_i = 0;
+                            }
+                            var p = Promise.resolve(entity_pages[i]);
+                            return {
+                                then: function () {
+                                    var result = p.then(arguments[0], arguments[1]);
+                                    result.abort = abort_mock;
+                                    return result;
+                                }
                             };
-                            return p;
                         })
                     };
                 })
@@ -57,6 +66,8 @@
                     toISOString: function () {}
                 };
             });
+
+            spyOn(window, 'addEventListener');
         });
 
         it("wait until the init method is called", function () {
@@ -72,9 +83,19 @@
             expect(NGSI.Connection).not.toHaveBeenCalled();
         });
 
-        it("connect on init", () => {
+        it("connect on init", (done) => {
             MashupPlatform.operator.outputs.entityOutput.connect(true);
 
+            entity_pages = [
+                {
+                    count: 3,
+                    results: [
+                        {id: "1", attr1: 5},
+                        {id: "2", attr2: false},
+                        {id: "3", attr1: []},
+                    ]
+                }
+            ];
             operator.init();
 
             expect(operator.connection).not.toEqual(null);
@@ -86,6 +107,12 @@
                 },
                 use_user_fiware_token: false
             });
+
+            // Wait until it process the initial entities
+            setTimeout(() => {
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", entity_pages[0].results);
+                done();
+            }, 0);
         });
 
         it("connect (empty service)", () => {
@@ -177,6 +204,37 @@
                     done();
                 }, 0);
             }, 0);
+        });
+
+        it("cancel pending queries before unloading", () => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            operator.init();
+            var connection = operator.connection;
+
+            // Call beforeunload listener
+            window.addEventListener.calls.mostRecent().args[1]();
+            expect(abort_mock).toHaveBeenCalled();
+            expect(connection.v2.deleteSubscription).not.toHaveBeenCalled();
+            expect(operator.query_task).toBe(null);
+        });
+
+        it("cancel subscriptions before unloading", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+            operator.init();
+            var connection = operator.connection;
+
+            // Wait until subscription is created
+            setTimeout(() => {
+                expect(operator.subscriptionId).toBe("5a291bb652c2f6bef3e02fd9");
+
+                // Call beforeunload listener
+                window.addEventListener.calls.mostRecent().args[1]();
+                expect(connection.v2.deleteSubscription).toHaveBeenCalled();
+                expect(operator.query_task).toBe(null);
+
+                done();
+            });
         });
 
     });
