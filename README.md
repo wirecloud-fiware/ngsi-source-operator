@@ -1,5 +1,8 @@
 # NGSI source operator
 
+[![Build Status](https://travis-ci.org/wirecloud-fiware/ngsi-source-operator.svg?branch=develop)](https://travis-ci.org/wirecloud-fiware/ngsi-source-operator)
+[![Coverage Status](https://coveralls.io/repos/github/wirecloud-fiware/ngsi-source-operator/badge.svg?branch=develop)](https://coveralls.io/github/wirecloud-fiware/ngsi-source-operator?branch=develop)
+
 The NGSI source operator is a WireCloud operator usable for adding
 NGSI subscription support to your dashboards in a simple way. Those
 subscriptions are a great feature provided by the [Orion Context
