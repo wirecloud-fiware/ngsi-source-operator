@@ -7,6 +7,7 @@
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "^0.11.0",
     "grunt-contrib-copy": "^0.8.0",
+    "grunt-coveralls": "^1.0.1",
     "grunt-karma": "^2.0.0",
     "grunt-strip-code": "^0.1.2",
     "grunt-text-replace": "~0.4.0",
@@ -18,6 +19,7 @@
     "karma-coverage": "^1.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
+    "karma-junit-reporter": "^1.2.0",
     "mock-applicationmashup": "^1.0.0-c",
     "wirecloud-config-parser": "^0.2.0"
   },

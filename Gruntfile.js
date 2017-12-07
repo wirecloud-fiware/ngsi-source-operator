@@ -51,6 +51,12 @@ module.exports = function (grunt) {
             }
         },
 
+        coveralls: {
+            library: {
+                src: 'build/coverage/lcov/lcov.info',
+            }
+        },
+
         strip_code: {
             imports: {
                 options: {
@@ -116,6 +122,11 @@ module.exports = function (grunt) {
 
         karma: {
             options: {
+                files: [
+                    'node_modules/mock-applicationmashup/dist/MockMP.js',
+                    'src/js/*.js',
+                    'tests/js/*Spec.js'
+                ],
                 frameworks: ['jasmine'],
                 reporters: ['progress', 'coverage'],
                 browsers: ['Chrome', 'Firefox'],
@@ -127,13 +138,26 @@ module.exports = function (grunt) {
                         type: 'html',
                         dir: 'build/coverage'
                     },
-                    files: [
-                        'node_modules/mock-applicationmashup/dist/MockMP.js',
-                        'src/js/*.js',
-                        'tests/js/*Spec.js'
-                    ],
                     preprocessors: {
                         'src/js/*.js': ['coverage'],
+                    }
+                }
+            },
+            operatorci: {
+                options: {
+                    junitReporter: {
+                        "outputDir": 'build/test-reports'
+                    },
+                    reporters: ['junit', 'coverage'],
+                    browsers: ['ChromeNoSandbox', 'Firefox'],
+                    coverageReporter: {
+                        reporters: [
+                            {type: 'cobertura', dir: 'build/coverage', subdir: 'xml'},
+                            {type: 'lcov', dir: 'build/coverage', subdir: 'lcov'},
+                        ]
+                    },
+                    preprocessors: {
+                        "src/js/*.js": ['coverage'],
                     }
                 }
             }
@@ -157,13 +181,21 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
         'bower:install',
         'eslint',
-        'karma'
+        'karma:operator'
+    ]);
+
+    grunt.registerTask('ci', [
+        'bower:install',
+        'eslint',
+        'karma:operatorci',
+        'coveralls'
     ]);
 
     grunt.registerTask('build', [
