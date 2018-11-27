@@ -64,7 +64,7 @@
 
         // Create NGSI conection
         doInitialSubscription.call(this);
-        
+
         // Initial sent of configs on metadata output endpoint
         sendMetadata();
     };
@@ -272,7 +272,8 @@
         if (MashupPlatform.operator.outputs.ngsimetadata.connected) {
             var metadata = {
                 types: MashupPlatform.prefs.get('ngsi_entities').trim().split(","),
-                filteredAttributes: MashupPlatform.prefs.get('ngsi_update_attributes').trim().split(","),
+                filteredAttributes: "",  // This widget does not have such information
+                updateAttributes: MashupPlatform.prefs.get('ngsi_update_attributes').trim().split(","),
                 // entity: response.result.entity, // For future support of fiware-ngsi-registry
                 auth_type: "",  // Not present in NGSI-source
                 idPattern: MashupPlatform.prefs.get('ngsi_id_filter').trim(),
