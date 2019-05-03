@@ -64,6 +64,9 @@
 
         // Create NGSI conection
         doInitialSubscription.call(this);
+
+        // Initial sent of configs on metadata output endpoint
+        sendMetadata();
     };
 
     /* *****************************************************************************/
@@ -235,6 +238,8 @@
 
     var handlerPreferences = function handlerPreferences(new_values) {
 
+        sendMetadata();
+
         if (this.refresh_interval) {
             clearInterval(this.refresh_interval);
             this.refresh_interval = null;
@@ -262,6 +267,28 @@
             doInitialSubscription.call(this);
         }
     };
+
+    var sendMetadata = function sendMetadata() {
+        if (MashupPlatform.operator.outputs.ngsimetadata.connected) {
+            var metadata = {
+                types: MashupPlatform.prefs.get('ngsi_entities').trim().split(","),
+                filteredAttributes: "",  // This widget does not have such information
+                updateAttributes: MashupPlatform.prefs.get('ngsi_update_attributes').trim().split(","),
+                // entity: response.result.entity, // For future support of fiware-ngsi-registry
+                auth_type: "",  // Not present in NGSI-source
+                idPattern: MashupPlatform.prefs.get('ngsi_id_filter').trim(),
+                query: MashupPlatform.prefs.get('query').trim(),
+                values: false, // Not needed in NGSI-source
+                serverURL: MashupPlatform.prefs.get('ngsi_server').trim(),
+                proxyURL: MashupPlatform.prefs.get('ngsi_proxy').trim(),
+                servicePath: MashupPlatform.prefs.get('ngsi_service_path').trim(),
+                tenant: MashupPlatform.prefs.get('ngsi_tenant').trim(),
+                // use_owner_credentials: false,
+                // use_user_fiware_token: false,
+            };
+            MashupPlatform.wiring.pushEvent('ngsimetadata', metadata);
+        }
+    }
 
     /* import-block */
     window.NGSISource = NGSISource;

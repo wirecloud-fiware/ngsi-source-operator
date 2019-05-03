@@ -23,7 +23,7 @@
                     'use_owner_credentials': false,
                     'use_user_fiware_token': false
                 },
-                outputs: ['entityOutput']
+                outputs: ['entityOutput', 'ngsimetadata']
             });
         });
 
