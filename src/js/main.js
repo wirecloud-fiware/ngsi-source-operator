@@ -153,6 +153,8 @@
                 entities.push({idPattern: id_pattern});
             }
 
+            let attrsFormat = MashupPlatform.prefs.get('attrs_format');
+            attrsFormat = attrsFormat == "" ? "keyValues" : attrsFormat;
             this.connection.v2.createSubscription({
                 description: "ngsi source subscription",
                 subject: {
@@ -160,14 +162,12 @@
                     condition: condition
                 },
                 notification: {
-                    attrsFormat: "keyValues",
+                    attrsFormat: attrsFormat,
                     callback: (notification) => {
                         handlerReceiveEntities.call(this, notification.data);
                     }
                 },
                 expires: moment().add('3', 'hours').toISOString()
-            }, {
-                keyValues: true,
             }).then(
                 (response) => {
                     MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
@@ -203,12 +203,14 @@
     };
 
     var requestInitialData = function requestInitialData(idPattern, types, filter, page) {
+        let attrsFormat = MashupPlatform.prefs.get('attrs_format');
+        attrsFormat = attrsFormat == "" ? "keyValues" : attrsFormat;
         return this.connection.v2.listEntities(
             {
                 idPattern: idPattern,
                 type: types,
                 count: true,
-                keyValues: true,
+                keyValues: attrsFormat === "keyValues",
                 limit: 100,
                 offset: page * 100,
                 q: filter

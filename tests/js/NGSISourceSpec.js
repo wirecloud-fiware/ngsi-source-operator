@@ -21,7 +21,8 @@
                     'ngsi_service_path': '/Spain/Madrid',
                     'ngsi_update_attributes': '',
                     'use_owner_credentials': false,
-                    'use_user_fiware_token': false
+                    'use_user_fiware_token': false,
+                    'attrs_format': "keyValues"
                 },
                 outputs: ['entityOutput', 'ngsimetadata']
             });
