@@ -48,6 +48,9 @@ Settings
 - **Monitored NGSI Attributes:** Attributes to monitor for updates. those
   changes are tracked by creating a subscription inside the context broker. If
   this list is empty, that subscription won't be created.
+- **attributes format ('keyValues', 'normalized' or 'values'):** Specifies how
+  the entities are represented in notifications. Accepted values are 'normalized'
+  (default), 'keyValues' or 'values'.
 
 **NOTE** If you are using a custom instance of the Orion Context Broker, take
 into account that by default Orion doesn't support sending notifications to

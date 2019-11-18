@@ -1,3 +1,9 @@
+## v4.1.1 (20179-11-18)
+
+- Nueva preferencia attrs_format para el formato de los datos. normalized, 
+  keyValue or values
+
+
 ## v4.0.0 (2017-12-07)
 
 - Actualizado el operador para usar NGSIv2 (el soporte para NGSIv1 se ha

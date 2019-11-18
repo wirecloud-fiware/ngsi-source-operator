@@ -222,6 +222,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.type).toEqual("AirQualityObserved,WeatherForecast");
 
                 // Create Subscription Options
@@ -231,6 +232,7 @@
                     {idPattern: '.*', type: 'AirQualityObserved'},
                     {idPattern: '.*', type: 'WeatherForecast'}
                 ]);
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
 
                 done();
             }, 0);
@@ -247,6 +249,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.idPattern).toEqual("a.*b");
 
                 // Create Subscription Options
@@ -255,6 +258,7 @@
                 expect(cso.subject.entities).toEqual([
                     {idPattern: 'a.*b'}
                 ]);
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
 
                 done();
             }, 0);
@@ -271,6 +275,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.q).toEqual("temperature<=20");
 
                 // Create Subscription Options
@@ -280,6 +285,29 @@
                     attrs: ['location'],
                     expression: {q: "temperature<=20"}
                 });
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
+
+                done();
+            }, 0);
+        });
+
+        it("connect (normalized data + subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('attrs_format', 'normalized');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(false);
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.notification.attrsFormat).toEqual("normalized");
 
                 done();
             }, 0);

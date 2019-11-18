@@ -1,3 +1,9 @@
+## v4.1.1 (20179-11-18)
+
+- New preference attrs_format to select if you want the attributes normalized`,
+  `keyValue` or `values` format.`
+
+
 ## v4.0.0 (2017-12-07)
 
 - Updated to use NGSIv2 (NGSIv1 support dropped)
