@@ -78,15 +78,10 @@
             label="Monitored NGSI Attributes"
             description="A comma separated list of attributes to monitor for updates. Those changes are tracked by creating a subscription inside the context broker. If this list is empty, that subscription won't be created."
             default="" />
-        <preference
-            name="attrs_format"
-            type="text"
-            label="attributes format ('keyValues', 'normalized' or 'values')"
-            description="Specifies how the entities are represented in notifications. Accepted values are 'normalized' (default), 'keyValues' or 'values'."
-            default="keyValues" />
     </preferences>
     <wiring>
         <outputendpoint name="entityOutput" type="text" label="Entities" description="Initial entity values and entity updates" friendcode="entity-list"/>
+        <outputendpoint name="normalizedOutput" type="text" label="Normalized Entities" description="Initial entity values and entity updates" friendcode="entity-normalized-list"/>
         <outputendpoint name="ngsimetadata" type="text" label="NGSI metadata" description="Metadata of the NGSI config usable on wizards creating data dashboards such as NGSI-dashboard-creatorI" friendcode="ngsi-metadata" />
     </wiring>
     <scripts>
