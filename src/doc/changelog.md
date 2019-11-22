@@ -1,7 +1,7 @@
-## v4.1.1 (20179-11-18)
+## v4.2.0 (2019-11-XX)
 
-- New preference attrs_format to select if you want the attributes `normalized`,
-  `keyValue` or `values` format.
+- Added a new output endpoint for retrieving entities using the `normalized`
+  format.
 
 
 ## v4.0.0 (2017-12-07)

@@ -1,7 +1,7 @@
-## v4.1.1 (20179-11-18)
+## v4.2.0 (2019-11-XX)
 
-- Nueva preferencia attrs_format para el formato de los datos. `normalized`, 
-  `keyValue` or `values`
+- Añadido un nuevo endpoint de salida para obtener las entidades usando el
+    formato `normalized`.
 
 
 ## v4.0.0 (2017-12-07)
