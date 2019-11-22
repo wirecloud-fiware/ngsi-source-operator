@@ -78,7 +78,7 @@
         this.subscriptionId = null;
         this.connection = null;
 
-        if (!MashupPlatform.operator.outputs.entityOutput.connected) {
+        if (!MashupPlatform.operator.outputs.entityOutput.connected && !MashupPlatform.operator.outputs.normalizedOutput.connected) {
             return;
         }
 
@@ -153,6 +153,7 @@
                 entities.push({idPattern: id_pattern});
             }
 
+            let attrsFormat = MashupPlatform.operator.outputs.normalizedOutput.connected ? "normalized" : "keyValues";
             this.connection.v2.createSubscription({
                 description: "ngsi source subscription",
                 subject: {
@@ -160,14 +161,12 @@
                     condition: condition
                 },
                 notification: {
-                    attrsFormat: "keyValues",
+                    attrsFormat: attrsFormat,
                     callback: (notification) => {
                         handlerReceiveEntities.call(this, notification.data);
                     }
                 },
                 expires: moment().add('3', 'hours').toISOString()
-            }, {
-                keyValues: true,
             }).then(
                 (response) => {
                     MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
@@ -202,22 +201,22 @@
         }
     };
 
-    var requestInitialData = function requestInitialData(idPattern, types, filter, page) {
+    var requestInitialData = function requestInitialData(idPattern, types, filter, attrsFormat, page) {
         return this.connection.v2.listEntities(
             {
                 idPattern: idPattern,
                 type: types,
                 count: true,
-                keyValues: true,
+                keyValues: attrsFormat === "keyValues",
                 limit: 100,
                 offset: page * 100,
                 q: filter
             }
         ).then(
             (response) => {
-                handlerReceiveEntities.call(this, response.results);
+                handlerReceiveEntities.call(this, attrsFormat, response.results);
                 if (page < 100 && (page + 1) * 100 < response.count) {
-                    return requestInitialData.call(this, idPattern, types, filter, page + 1);
+                    return requestInitialData.call(this, idPattern, types, filter, attrsFormat, page + 1);
                 }
             },
             () => {
@@ -227,11 +226,33 @@
     };
 
     var doInitialQueries = function doInitialQueries(idPattern, types, filter) {
-        this.query_task = requestInitialData.call(this, idPattern, types, filter, 0);
+        let attrsFormat = MashupPlatform.operator.outputs.normalizedOutput.connected ? "normalized" : "keyValues";
+        this.query_task = requestInitialData.call(this, idPattern, types, filter, attrsFormat, 0);
     };
 
-    var handlerReceiveEntities = function handlerReceiveEntities(elements) {
-        MashupPlatform.wiring.pushEvent("entityOutput", elements);
+    const normalize2KeyValue = function normalize2KeyValue(entity) {
+        // Transform to keyValue
+        let result = {};
+        for (let key in entity) {
+            let at = entity[key];
+            if (key === "id" || key === "type") {
+                result[key] = at;
+            } else {
+                result[key] = at.value;
+            }
+        }
+        return result;
+    };
+
+    var handlerReceiveEntities = function handlerReceiveEntities(format, elements) {
+        if (MashupPlatform.operator.outputs.entityOutput.connected && format === "keyValues") {
+            MashupPlatform.wiring.pushEvent("entityOutput", elements);
+        } else if (MashupPlatform.operator.outputs.entityOutput.connected) {
+            MashupPlatform.wiring.pushEvent("entityOutput", elements.map(normalize2KeyValue));
+        }
+        if (MashupPlatform.operator.outputs.normalizedOutput && format === "normalized") {
+            MashupPlatform.wiring.pushEvent("normalizedOutput", elements);
+        }
     };
 
     /* *************************** Preference Handler *****************************/

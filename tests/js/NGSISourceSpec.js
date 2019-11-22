@@ -23,7 +23,7 @@
                     'use_owner_credentials': false,
                     'use_user_fiware_token': false
                 },
-                outputs: ['entityOutput', 'ngsimetadata']
+                outputs: ['entityOutput', 'normalizedOutput', 'ngsimetadata']
             });
         });
 
@@ -76,7 +76,7 @@
             expect(operator.query_task).toBe(null);
         });
 
-        it("does not try to connect on init if the output endpoint is not connected", () => {
+        it("does not try to connect on init if any of the output endpoints are not connected", () => {
             operator.init();
 
             expect(operator.connection).toEqual(null);
@@ -221,6 +221,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.type).toEqual("AirQualityObserved,WeatherForecast");
 
                 // Create Subscription Options
@@ -230,6 +231,7 @@
                     {idPattern: '.*', type: 'AirQualityObserved'},
                     {idPattern: '.*', type: 'WeatherForecast'}
                 ]);
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
 
                 done();
             }, 0);
@@ -246,6 +248,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.idPattern).toEqual("a.*b");
 
                 // Create Subscription Options
@@ -254,6 +257,7 @@
                 expect(cso.subject.entities).toEqual([
                     {idPattern: 'a.*b'}
                 ]);
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
 
                 done();
             }, 0);
@@ -270,6 +274,7 @@
             setTimeout(() => {
                 // List Entities Options
                 var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
                 expect(leo.q).toEqual("temperature<=20");
 
                 // Create Subscription Options
@@ -279,6 +284,72 @@
                     attrs: ['location'],
                     expression: {q: "temperature<=20"}
                 });
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
+
+                done();
+            }, 0);
+        });
+
+        it("connect (keyValues + normalized data + subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.operator.outputs.normalizedOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+            entity_pages = [
+                {
+                    count: 3,
+                    results: [
+                        {id: "1", attr1: {type: "Number", value: 5, metadata: {}}},
+                        {id: "2", attr2: {type: "Boolean", value: false, metadata: {unit: "m"}}},
+                        {id: "3", attr1: {type: "List", value: [], metadata: {}}},
+                    ]
+                }
+            ];
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(false);
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.notification.attrsFormat).toEqual("normalized");
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", [{id: "1", attr1: 5}, {id: "2", attr2: false}, {id: "3", attr1: []}]);
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("normalizedOutput", entity_pages[0].results);
+
+                done();
+            }, 0);
+        });
+
+        it("connect (normalized data + subscription)", (done) => {
+            MashupPlatform.operator.outputs.normalizedOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+            entity_pages = [
+                {
+                    count: 3,
+                    results: [
+                        {id: "1", attr1: 5},
+                        {id: "2", attr2: false},
+                        {id: "3", attr1: []},
+                    ]
+                }
+            ];
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                var leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(false);
+
+                // Create Subscription Options
+                var cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.notification.attrsFormat).toEqual("normalized");
 
                 done();
             }, 0);

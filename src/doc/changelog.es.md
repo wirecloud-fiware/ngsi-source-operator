@@ -1,3 +1,9 @@
+## v4.2.0 (2019-11-XX)
+
+- Añadido un nuevo endpoint de salida para obtener las entidades usando el
+    formato `normalized`.
+
+
 ## v4.0.0 (2017-12-07)
 
 - Actualizado el operador para usar NGSIv2 (el soporte para NGSIv1 se ha

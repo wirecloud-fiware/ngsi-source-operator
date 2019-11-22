@@ -1,3 +1,9 @@
+## v4.2.0 (2019-11-XX)
+
+- Added a new output endpoint for retrieving entities using the `normalized`
+  format.
+
+
 ## v4.0.0 (2017-12-07)
 
 - Updated to use NGSIv2 (NGSIv1 support dropped)
