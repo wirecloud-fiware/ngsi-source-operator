@@ -5,16 +5,6 @@ This operator allows you to use any [Orion Context Broker][orion] server as
 source of data. This is accomplished by creating a subscription to obtain real
 time notifications about changes on the entities of interest.
 
-**NOTE:** This operator creates subscriptions using the *flat* option of the
-WireCloud's NGSI API making impossible to use this operator with entities that
-doesn't meet the following assumptions:
-
-- given an entity id there is only one value for the entity's type parameter
-- entities doesn't have attributes called id or type
-- entities have only an attribute with a given name
-- attribute types don't matter or are already known
-- attribute metadata don't matter or is already known
-
 Settings
 --------
 
@@ -52,14 +42,6 @@ Settings
   the entities are represented in notifications. Accepted values are 'normalized'
   (default), 'keyValues' or 'values'.
 
-**NOTE** If you are using a custom instance of the Orion Context Broker, take
-into account that by default Orion doesn't support sending notifications to
-https endpoints. In those cases you can make use of a NGSI available through
-http at (http://ngsiproxy.lab.fiware.org) instead of using the default one that
-uses https (https://ngsiproxy.lab.fiware.org). Anyway, it is very recommended
-to enable the https support (see this
-[link](http://stackoverflow.com/questions/23338154/orion-context-broker-https-for-subscribers)
-for more info about this matter).
 
 Wiring
 ------
@@ -70,20 +52,99 @@ Input Endpoints:
 
 Output Endpoints:
 
-*   **Provide entity:** This operator sends an event thought this endpoint for
-    each entity update retrieved from the context broker. In addition to this, this
-    operator send an event for every entity available initially on the context
-    broker.
-
-    In any case, event data follows the format used by the NGSI API of WireCloud
-    for returning. E.g.
+-   **Entities:** This endpoint is used for sending initial entities as well as
+    any updates received as part of the created subscription. This endpoint
+    provides such entities updates using chunks of entities using the
+    `keyValues` format. E.g:
 
         :::json
-        {
-            "id": "van4",
-            "type": "Van",
-            "current_position": "43.47173, -3.7967205"
-        }
+        [
+            {
+                "id": "van4",
+                "type": "Vehicle",
+                "location": {
+                    "type": "Point",
+                    "coordinates": [-3.7967205, 43.47173]
+                }
+            },
+            {
+                "id": "van10",
+                "type": "Vehicle",
+                "location": {
+                    "type": "Point",
+                    "coordinates": []
+                }
+            }
+        ]
+
+-   **Normalized Entities**: This endpoint is used for sending initial entities
+    as well as any updates received as part of the created subscription. This
+    endpoint provides such entities updates using chunks of entities using the
+    `normalized` format. E.g:
+
+        :::json
+        [
+            {
+                "id": "madrid-bici-2",
+                "type": "BikeHireDockingStation",
+                "address": {
+                    "type": "Text",
+                    "value": "Puerta del Sol n\u00ba 1",
+                    "metadata": {}
+                },
+                "availableBikeNumber": {
+                    "type": "Number",
+                    "value": 22,
+                    "metadata": {}
+                },
+                "freeSlotNumber": {
+                    "type": "Number",
+                    "value": 2,
+                    "metadata": {}
+                },
+                "location": {
+                    "type": "geo:json",
+                    "value": {
+                        "type": "Point",
+                        "coordinates": [
+                            -3.7024207,
+                            40.4170009
+                        ]
+                    },
+                    "metadata": {}
+                }
+            },
+            {
+                "id": "madrid-bici-1",
+                "type": "BikeHireDockingStation",
+                "address": {
+                    "type": "Text",
+                    "value": "Puerta del Sol n\u00ba 1",
+                    "metadata": {}
+                },
+                "availableBikeNumber": {
+                    "type": "Number",
+                    "value": 17,
+                    "metadata": {}
+                },
+                "freeSlotNumber": {
+                    "type": "Number",
+                    "value": 6,
+                    "metadata": {}
+                },
+                "location": {
+                    "type": "geo:json",
+                    "value": {
+                        "type": "Point",
+                        "coordinates": [
+                            -3.7024255,
+                            40.4168961
+                        ]
+                    },
+                    "metadata": {}
+                }
+            }
+        ]
 
 
 References
@@ -91,4 +152,4 @@ References
 
 * [Orion Context Broker][orion]
 
-[orion]: http://catalogue.fiware.org/enablers/publishsubscribe-context-broker-orion-context-broker "Orion Context Broker info"
+[orion]: https://fiware-orion.readthedocs.io/en/master/ "Orion Context Broker info"
