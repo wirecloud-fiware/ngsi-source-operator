@@ -2,6 +2,9 @@
 
 - Añadido un nuevo endpoint de salida para obtener las entidades usando el
     formato `normalized`.
+- Uso de la opción `skipInitialNotification` para evitar recibir la
+  notificación inicial que manda por defecto el Context Broker Orion. Requiere
+  WireCloud 1.4+ para que tenga efecto.
 
 
 ## v4.0.0 (2017-12-07)

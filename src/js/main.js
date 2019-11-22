@@ -167,6 +167,8 @@
                     }
                 },
                 expires: moment().add('3', 'hours').toISOString()
+            }, {
+                skipInitialNotification: true
             }).then(
                 (response) => {
                     MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);

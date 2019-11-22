@@ -2,6 +2,9 @@
 
 - Added a new output endpoint for retrieving entities using the `normalized`
   format.
+- Use the `skipInitialNotification` option to avoid receiving the initial
+  notification usually sent by the orion context broker. Requires WireCloud 1.4+
+  to take effect.
 
 
 ## v4.0.0 (2017-12-07)
