@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013-2017 CoNWeT Lab., Universidad Politécnica de Madrid
+ * Copyright (c) 2019-2020 Future Internet Consulting and Development Solutions S.L.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -277,13 +278,13 @@
             this.connection.v2.deleteSubscription(this.subscriptionId).then(
                 () => {
                     MashupPlatform.operator.log("Old subscription has been cancelled sucessfully", MashupPlatform.log.INFO);
-                    doInitialSubscription.call(this);
                 },
                 () => {
                     MashupPlatform.operator.log("Error cancelling old subscription", MashupPlatform.log.WARN);
-                    doInitialSubscription.call(this);
                 }
-            );
+            ).finally(() => {
+                doInitialSubscription.call(this);
+            });
             // Remove subscriptionId without waiting to know if the operator finished successfully
             this.subscriptionId = null;
         } else {
@@ -315,6 +316,7 @@
 
     /* import-block */
     window.NGSISource = NGSISource;
+    window.refreshNGSISubscription = refreshNGSISubscription;
     /* end-import-block */
 
     var ngsiSource = new NGSISource();
