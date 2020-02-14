@@ -163,7 +163,7 @@
                 notification: {
                     attrsFormat: attrsFormat,
                     callback: (notification) => {
-                        handlerReceiveEntities.call(this, notification.data);
+                        handlerReceiveEntities.call(this, attrsFormat, notification.data);
                     }
                 },
                 expires: moment().add('3', 'hours').toISOString()

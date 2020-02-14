@@ -210,6 +210,37 @@
             });
         });
 
+        it("connect (subscription)", (done) => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_entities', '');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+
+            operator.init();
+
+            // Wait until initial queries are processed
+            setTimeout(() => {
+                // List Entities Options
+                let leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.keyValues).toEqual(true);
+                expect(leo.type).toEqual(undefined);
+
+                // Create Subscription Options
+                let cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.subject.entities).toEqual([
+                    {idPattern: '.*'}
+                ]);
+                expect(cso.notification.attrsFormat).toEqual("keyValues");
+
+                let data = [{id: "1", type: "Entity"}];
+                expect(cso.notification.callback).toEqual(jasmine.any(Function));
+                cso.notification.callback({data: data});
+
+                expect(MashupPlatform.wiring.pushEvent).toHaveBeenCalledWith("entityOutput", data);
+                done();
+            }, 0);
+        });
+
         it("connect (types + subscription)", (done) => {
             MashupPlatform.operator.outputs.entityOutput.connect(true);
             MashupPlatform.prefs.set('ngsi_entities', 'AirQualityObserved, WeatherForecast');
