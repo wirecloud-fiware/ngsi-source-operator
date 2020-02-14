@@ -150,6 +150,11 @@ module.exports = function (grunt) {
                     }
                 }
             },
+            operatordebug: {
+                options: {
+                    singleRun: false
+                }
+            },
             operatorci: {
                 options: {
                     junitReporter: {
