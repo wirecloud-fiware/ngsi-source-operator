@@ -208,6 +208,7 @@
         return this.connection.v2.listEntities(
             {
                 idPattern: idPattern,
+                attrs: "dateModified,dateCreated,dateExpires,*",
                 type: types,
                 count: true,
                 keyValues: attrsFormat === "keyValues",

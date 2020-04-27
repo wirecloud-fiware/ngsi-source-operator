@@ -5,7 +5,8 @@
 - Uso de la opción `skipInitialNotification` para evitar recibir la
   notificación inicial que manda por defecto el Context Broker Orion. Requiere
   WireCloud 1.4+ para que tenga efecto.
-
+- Añadidos los atributos dateModified, dateCreated y dateExpires a la petición
+  inicial de las entidades.
 
 ## v4.0.0 (2017-12-07)
 
