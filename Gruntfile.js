@@ -14,18 +14,6 @@ module.exports = function (grunt) {
 
         metadata: parser.getData(),
 
-        bower: {
-            install: {
-                options: {
-                    copy: true,
-                    layout: function (type, component, source) {
-                        return type;
-                    },
-                    targetDir: './build/lib/lib'
-                }
-            }
-        },
-
         eslint: {
             operator: {
                 src: 'src/js/**/*.js',
@@ -47,7 +35,8 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'}
+                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'},
+                    {expand: true, cwd: 'node_modules/moment/min', src: 'moment-with-locales.min.js', dest: 'build/lib/lib/js'}
                 ]
             }
         },
@@ -114,7 +103,7 @@ module.exports = function (grunt) {
 
         clean: {
             build: {
-                src: ['build', 'bower_components']
+                src: ['build']
             },
             temp: {
                 src: ['build/src']
@@ -131,6 +120,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     'node_modules/mock-applicationmashup/dist/MockMP.js',
+                    'node_modules/moment/min/moment-with-locales.js',
                     'src/js/*.js',
                     'tests/js/*Spec.js'
                 ],
@@ -187,7 +177,6 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-wirecloud');
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('gruntify-eslint');
     grunt.loadNpmTasks('grunt-contrib-compress');
@@ -198,13 +187,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
-        'bower:install',
         'eslint',
         'karma:operator'
     ]);
 
     grunt.registerTask('ci', [
-        'bower:install',
         'eslint',
         'karma:operatorci',
         'coveralls'

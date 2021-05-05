@@ -1,9 +1,7 @@
 {
   "description": "This package.json file is only used for installing npm dependencies. But this is not an installable node package, but a WireCloud operator. Take a look into src/config.xml for more details about this operator",
   "devDependencies": {
-    "bower": "^1.8.8",
-    "grunt": "^1.0.4",
-    "grunt-bower-task": "^0.5.0",
+    "grunt": "^1.4.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-compress": "^1.6.0",
     "grunt-contrib-copy": "^1.0.0",
@@ -21,6 +19,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-junit-reporter": "^2.0.1",
     "mock-applicationmashup": "^1.0.0-f",
+    "moment": "^2.24.0",
     "wirecloud-config-parser": "^0.2.3"
   },
   "private": true,
