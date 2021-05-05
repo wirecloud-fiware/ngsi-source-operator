@@ -106,12 +106,6 @@ module.exports = function (grunt) {
 
         karma: {
             options: {
-                customLaunchers: {
-                    ChromeNoSandbox: {
-                        base: "Chrome",
-                        flags: ['--no-sandbox']
-                    }
-                },
                 files: [
                     'node_modules/mock-applicationmashup/dist/MockMP.js',
                     'node_modules/moment/min/moment-with-locales.js',
@@ -120,7 +114,7 @@ module.exports = function (grunt) {
                 ],
                 frameworks: ['jasmine'],
                 reporters: ['progress', 'coverage'],
-                browsers: ['Chrome', 'Firefox'],
+                browsers: ["ChromeHeadless", "FirefoxHeadless"],
                 singleRun: true
             },
             operator: {
@@ -134,18 +128,12 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            operatordebug: {
-                options: {
-                    singleRun: false
-                }
-            },
             operatorci: {
                 options: {
                     junitReporter: {
                         "outputDir": 'build/test-reports'
                     },
-                    reporters: ['junit', 'coverage'],
-                    browsers: ['ChromeNoSandbox', 'Firefox'],
+                    reporters: ["junit", "coverage", "progress"],
                     coverageReporter: {
                         reporters: [
                             {type: 'cobertura', dir: 'build/coverage', subdir: 'xml'},
@@ -155,6 +143,12 @@ module.exports = function (grunt) {
                     preprocessors: {
                         "src/js/*.js": ['coverage'],
                     }
+                }
+            },
+            operatordebug: {
+                options: {
+                    browsers: ["Chrome", "Firefox"],
+                    singleRun: false
                 }
             }
         },
