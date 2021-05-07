@@ -1,10 +1,13 @@
-## v4.2.0 (2019-11-XX)
+## v4.2.0 (2021-05-XX)
 
 - Añadido un nuevo endpoint de salida para obtener las entidades usando el
     formato `normalized`.
 - Uso de la opción `skipInitialNotification` para evitar recibir la
   notificación inicial que manda por defecto el Context Broker Orion. Requiere
   WireCloud 1.4+ para que tenga efecto.
+- Añadida la opción de subscribirse a los cambios en cualquiera de los
+  atributos mediante el uso de comodín `*` en la preferencia **Monitored NGSI
+  Attributes**.
 
 
 ## v4.0.0 (2017-12-07)

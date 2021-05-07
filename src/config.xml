@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="4.2.0b2">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="4.2.0rc1">
     <details>
         <title>NGSI source</title>
         <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
-        <authors>Álvaro Arranz García &lt;aarranz@conwet.com&gt;</authors>
+        <authors>Álvaro Arranz García &lt;aarranz@ficodes.com&gt;</authors>
         <email>aarranz@conwet.com</email>
         <image>images/catalogue.png</image>
         <description>Retrieve Orion Context Broker entities and their updates in real time.</description>
@@ -76,7 +76,7 @@
             name="ngsi_update_attributes"
             type="text"
             label="Monitored NGSI Attributes"
-            description="A comma separated list of attributes to monitor for updates. Those changes are tracked by creating a subscription inside the context broker. If this list is empty, that subscription won't be created."
+            description="A comma separated list of attributes to monitor for updates. Those changes are tracked by creating a subscription inside the context broker. If this list is empty, that subscription won't be created. Use `*` to subscribe to changes on any attribute."
             default="" />
     </preferences>
     <wiring>

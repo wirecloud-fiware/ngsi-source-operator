@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2013-2017 CoNWeT Lab., Universidad Politécnica de Madrid
- * Copyright (c) 2019-2020 Future Internet Consulting and Development Solutions S.L.
+ * Copyright (c) 2019-2021 Future Internet Consulting and Development Solutions S.L.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -411,6 +411,20 @@
 
                 done();
             }, 0);
+        });
+
+        it("connect (subscribe to changes in any attribute)", () => {
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+            MashupPlatform.prefs.set('ngsi_update_attributes', '*');
+
+            operator.init();
+
+            // Create Subscription Options
+            const cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+            expect(cso.subject.condition).toEqual({
+                attrs: []
+            });
         });
 
         it("connect (keyValues + normalized data + subscription)", (done) => {

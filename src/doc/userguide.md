@@ -35,9 +35,10 @@ Settings
   empty, in that case, entities won't be filtered by id.
 - **Query:** Filter entities by providing a query using the Simple Query
   Language.
-- **Monitored NGSI Attributes:** Attributes to monitor for updates. those
+- **Monitored NGSI Attributes:** Attributes to monitor for updates. Those
   changes are tracked by creating a subscription inside the context broker. If
-  this list is empty, that subscription won't be created.
+  this list is empty, that subscription won't be created. Use `*` to subscribe
+  to changes on any attribute.
 - **attributes format ('keyValues', 'normalized' or 'values'):** Specifies how
   the entities are represented in notifications. Accepted values are 'normalized'
   (default), 'keyValues' or 'values'.
