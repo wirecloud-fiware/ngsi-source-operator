@@ -2,7 +2,7 @@
 
 [![](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/visualization.svg)](https://www.fiware.org/developers/catalogue/)
 ![](https://img.shields.io/github/license/wirecloud-fiware/ngsi-source-operator.svg)<br/>
-[![Tests](https://github.com/wirecloud-fiware/ngsi-source-operator/workflows/Tests/badge.svg)](https://github.com/wirecloud-fiware/ngsi-source-operator/actions?query=workflow%3A%22Tests%22)
+[![Tests](https://github.com/wirecloud-fiware/ngsi-source-operator/actions/workflows/unittests.yml/badge.svg)](https://github.com/wirecloud-fiware/ngsi-source-operator/actions/workflows/unittests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/wirecloud-fiware/ngsi-source-operator/badge.svg?branch=develop)](https://coveralls.io/github/wirecloud-fiware/ngsi-source-operator?branch=develop)
 
 The NGSI source operator is a [WireCloud operator](http://wirecloud.readthedocs.org/en/latest/) usable for adding NGSI
