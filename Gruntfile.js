@@ -14,18 +14,6 @@ module.exports = function (grunt) {
 
         metadata: parser.getData(),
 
-        bower: {
-            install: {
-                options: {
-                    copy: true,
-                    layout: function (type, component, source) {
-                        return type;
-                    },
-                    targetDir: './build/lib/lib'
-                }
-            }
-        },
-
         eslint: {
             operator: {
                 src: 'src/js/**/*.js',
@@ -47,14 +35,9 @@ module.exports = function (grunt) {
         copy: {
             main: {
                 files: [
-                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'}
+                    {expand: true, cwd: 'src/js', src: '*', dest: 'build/src/js'},
+                    {expand: true, cwd: 'node_modules/moment/min', src: 'moment-with-locales.min.js', dest: 'build/lib/lib/js'}
                 ]
-            }
-        },
-
-        coveralls: {
-            library: {
-                src: 'build/coverage/lcov/lcov.info',
             }
         },
 
@@ -114,7 +97,7 @@ module.exports = function (grunt) {
 
         clean: {
             build: {
-                src: ['build', 'bower_components']
+                src: ['build']
             },
             temp: {
                 src: ['build/src']
@@ -123,20 +106,15 @@ module.exports = function (grunt) {
 
         karma: {
             options: {
-                customLaunchers: {
-                    ChromeNoSandbox: {
-                        base: "Chrome",
-                        flags: ['--no-sandbox']
-                    }
-                },
                 files: [
                     'node_modules/mock-applicationmashup/dist/MockMP.js',
+                    'node_modules/moment/min/moment-with-locales.js',
                     'src/js/*.js',
                     'tests/js/*Spec.js'
                 ],
                 frameworks: ['jasmine'],
                 reporters: ['progress', 'coverage'],
-                browsers: ['Chrome', 'Firefox'],
+                browsers: ["ChromeHeadless", "FirefoxHeadless"],
                 singleRun: true
             },
             operator: {
@@ -150,18 +128,12 @@ module.exports = function (grunt) {
                     }
                 }
             },
-            operatordebug: {
-                options: {
-                    singleRun: false
-                }
-            },
             operatorci: {
                 options: {
                     junitReporter: {
                         "outputDir": 'build/test-reports'
                     },
-                    reporters: ['junit', 'coverage'],
-                    browsers: ['ChromeNoSandbox', 'Firefox'],
+                    reporters: ["junit", "coverage", "progress"],
                     coverageReporter: {
                         reporters: [
                             {type: 'cobertura', dir: 'build/coverage', subdir: 'xml'},
@@ -171,6 +143,12 @@ module.exports = function (grunt) {
                     preprocessors: {
                         "src/js/*.js": ['coverage'],
                     }
+                }
+            },
+            operatordebug: {
+                options: {
+                    browsers: ["Chrome", "Firefox"],
+                    singleRun: false
                 }
             }
         },
@@ -187,27 +165,22 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-wirecloud');
-    grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('gruntify-eslint');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-strip-code');
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('test', [
-        'bower:install',
         'eslint',
         'karma:operator'
     ]);
 
     grunt.registerTask('ci', [
-        'bower:install',
         'eslint',
         'karma:operatorci',
-        'coveralls'
     ]);
 
     grunt.registerTask('build', [
