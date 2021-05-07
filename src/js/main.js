@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2013-2017 CoNWeT Lab., Universidad Politécnica de Madrid
- * Copyright (c) 2019-2020 Future Internet Consulting and Development Solutions S.L.
+ * Copyright (c) 2019-2021 Future Internet Consulting and Development Solutions S.L.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,7 +131,8 @@
             condition = {};
         }
         if (attrs !== "") {
-            condition.attrs = attrs.split(new RegExp(',\\s*'));
+            attrs = attrs.split(/,\s*/);
+            condition.attrs = attrs.includes("*") ? [] : attrs;
         }
         if (filter != null) {
             condition.expression = {

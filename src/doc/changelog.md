@@ -1,10 +1,12 @@
-## v4.2.0 (2019-11-XX)
+## v4.2.0 (2021-05-XX)
 
 - Added a new output endpoint for retrieving entities using the `normalized`
   format.
 - Use the `skipInitialNotification` option to avoid receiving the initial
   notification usually sent by the orion context broker. Requires WireCloud 1.4+
   to take effect.
+- Allow to monitor all entity attributes by providing the `*` value on the
+  **Monitored NGSI Attributes** setting.
 
 
 ## v4.0.0 (2017-12-07)
