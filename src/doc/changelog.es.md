@@ -8,6 +8,8 @@
 - Añadida la opción de subscribirse a los cambios en cualquiera de los
   atributos mediante el uso de comodín `*` en la preferencia **Monitored NGSI
   Attributes**.
+- Soporte para poder configurar que atributos y que metadatos van a ser pedidos
+  al context broker.
 
 
 ## v4.0.0 (2017-12-07)

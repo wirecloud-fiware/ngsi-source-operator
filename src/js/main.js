@@ -25,9 +25,9 @@
     /* ******************************** PRIVATE ************************************/
     /* *****************************************************************************/
 
-    const doInitialQueries = function doInitialQueries(idPattern, types, filter) {
+    const doInitialQueries = function doInitialQueries(idPattern, types, filter, attributes, metadata) {
         const attrsFormat = MashupPlatform.operator.outputs.normalizedOutput.connected ? "normalized" : "keyValues";
-        this.query_task = requestInitialData.call(this, idPattern, types, filter, attrsFormat, 0);
+        this.query_task = requestInitialData.call(this, idPattern, types, filter, attributes, metadata, attrsFormat, 0);
     };
 
     const refreshNGSISubscription = function refreshNGSISubscription() {
@@ -103,19 +103,33 @@
             id_pattern = '.*';
         }
 
+        // Filter using the Simple Query Language supported by NGSIv2
         let filter = MashupPlatform.prefs.get('query').trim();
-        let attrs = MashupPlatform.prefs.get('ngsi_update_attributes').trim();
-        if (filter === '') {
+        if (filter === "") {
             filter = undefined;
         }
 
+        // Filter entity attributes
+        let attributes = MashupPlatform.prefs.get("ngsi_attributes").trim();
+        if (attributes === "" || attributes === "*") {
+            attributes = undefined;
+        }
+
+        // Filter attribute metadata
+        let metadata = MashupPlatform.prefs.get("ngsi_metadata").trim();
+        if (metadata === "" || metadata === "*") {
+            metadata = undefined;
+        }
+
+        // Monitored attributes
+        let monitored_attrs = MashupPlatform.prefs.get('ngsi_update_attributes').trim();
         let condition = undefined;
-        if (filter != null || attrs !== "") {
+        if (filter != null || monitored_attrs !== "") {
             condition = {};
         }
-        if (attrs !== "") {
-            attrs = attrs.split(/,\s*/);
-            condition.attrs = attrs.includes("*") ? [] : attrs;
+        if (monitored_attrs !== "") {
+            monitored_attrs = monitored_attrs.split(/,\s*/);
+            condition.attrs = monitored_attrs.includes("*") ? [] : monitored_attrs;
         }
         if (filter != null) {
             condition.expression = {
@@ -123,8 +137,8 @@
             };
         }
 
-        if (attrs === "") {
-            doInitialQueries.call(this, id_pattern, types, filter);
+        if (monitored_attrs === "") {
+            doInitialQueries.call(this, id_pattern, types, filter, attributes, metadata);
         } else {
             let entities = [];
             if (types != null) {
@@ -146,6 +160,8 @@
                     condition: condition
                 },
                 notification: {
+                    attrs: attributes != null ? attributes.split(/,\s*/) : undefined,
+                    metadata: metadata != null ? metadata.split(/,\s*/) : undefined,
                     attrsFormat: attrsFormat,
                     callback: (notification) => {
                         handlerReceiveEntities.call(this, attrsFormat, notification.data);
@@ -159,7 +175,7 @@
                     MashupPlatform.operator.log("Subscription created successfully (id: " + response.subscription.id + ")", MashupPlatform.log.INFO);
                     this.subscriptionId = response.subscription.id;
                     this.refresh_interval = setInterval(refreshNGSISubscription.bind(this), 1000 * 60 * 60 * 2);  // each 2 hours
-                    doInitialQueries.call(this, id_pattern, types, filter);
+                    doInitialQueries.call(this, id_pattern, types, filter, attributes, metadata);
                 },
                 (e) => {
                     if (e instanceof NGSI.ProxyConnectionError) {
@@ -172,7 +188,7 @@
         }
     };
 
-    const requestInitialData = function requestInitialData(idPattern, types, filter, attrsFormat, page) {
+    const requestInitialData = function requestInitialData(idPattern, types, filter, attributes, metadata, attrsFormat, page) {
         return this.connection.v2.listEntities(
             {
                 idPattern: idPattern,
@@ -181,13 +197,15 @@
                 keyValues: attrsFormat === "keyValues",
                 limit: 100,
                 offset: page * 100,
-                q: filter
+                q: filter,
+                attrs: attributes,
+                metadata: metadata
             }
         ).then(
             (response) => {
                 handlerReceiveEntities.call(this, attrsFormat, response.results);
                 if (page < 100 && (page + 1) * 100 < response.count) {
-                    return requestInitialData.call(this, idPattern, types, filter, attrsFormat, page + 1);
+                    return requestInitialData.call(this, idPattern, types, filter, attributes, metadata, attrsFormat, page + 1);
                 }
             },
             () => {
