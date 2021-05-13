@@ -335,6 +335,46 @@
             }, 0);
         });
 
+        it("connect (custom attributes)", (done) => {
+            MashupPlatform.prefs.set('ngsi_attributes', 'speed,location');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+
+            operator.init();
+
+            setTimeout(() => {
+                // List Entities Options
+                const leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.attrs).toEqual("speed,location");
+
+                // Create Subscription Options
+                const cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.notification.attrs).toEqual(["speed", "location"]);
+                done();
+            });
+        });
+
+        it("connect (custom metadata)", (done) => {
+            MashupPlatform.prefs.set('ngsi_metadata', 'unitCode,timestamp');
+            MashupPlatform.prefs.set('ngsi_update_attributes', 'location');
+            MashupPlatform.operator.outputs.entityOutput.connect(true);
+
+            operator.init();
+
+            setTimeout(() => {
+                // List Entities Options
+                const leo = operator.connection.v2.listEntities.calls.mostRecent().args[0];
+                expect(leo.metadata).toEqual("unitCode,timestamp");
+
+                // Create Subscription Options
+                const cso = operator.connection.v2.createSubscription.calls.mostRecent().args[0];
+
+                expect(cso.notification.metadata).toEqual(["unitCode", "timestamp"]);
+                done();
+            });
+        });
+
         it("connect (types + subscription)", (done) => {
             MashupPlatform.operator.outputs.entityOutput.connect(true);
             MashupPlatform.prefs.set('ngsi_entities', 'AirQualityObserved, WeatherForecast');
