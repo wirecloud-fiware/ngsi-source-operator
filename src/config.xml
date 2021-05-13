@@ -73,6 +73,12 @@
             description="Filter entities by providing a query using the Simple Query Language."
             default="" />
         <preference
+            name="ngsi_attributes"
+            type="text"
+            label="Requested Attributes"
+            description="A comma separated list of attribute names or the `*` wildcard. Use `*` or an empty value to request all attributes except the builtin ones (`dateCreated`, `dateModified`, ...)."
+            default="*" />
+        <preference
             name="ngsi_metadata"
             type="text"
             label="Requested Metadata"

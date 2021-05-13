@@ -30,6 +30,7 @@
                 type: 'operator',
                 prefs: {
                     'query': '',
+                    'ngsi_attributes': '*',
                     'ngsi_entities': '',
                     'ngsi_id_filter': '',
                     'ngsi_metadata': '*',
