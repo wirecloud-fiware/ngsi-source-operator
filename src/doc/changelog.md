@@ -7,6 +7,8 @@
   to take effect.
 - Allow to monitor all entity attributes by providing the `*` value on the
   **Monitored NGSI Attributes** setting.
+- Allow to configure what attributes and metadata values are going to be
+  requested to the context broker.
 
 
 ## v4.0.0 (2017-12-07)
