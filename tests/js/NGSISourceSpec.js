@@ -32,10 +32,11 @@
                     'query': '',
                     'ngsi_entities': '',
                     'ngsi_id_filter': '',
+                    'ngsi_metadata': '*',
                     'ngsi_proxy': 'https://ngsiproxy.example.com',
                     'ngsi_server': 'https://orion.example.com',
-                    'ngsi_tenant': 'Tenant',
                     'ngsi_service_path': '/Spain/Madrid',
+                    'ngsi_tenant': 'Tenant',
                     'ngsi_update_attributes': '',
                     'use_owner_credentials': false,
                     'use_user_fiware_token': false
