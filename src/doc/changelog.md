@@ -1,4 +1,4 @@
-## v4.2.0 (2021-05-XX)
+## v4.2.0 (2021-05-14)
 
 - Added a new output endpoint for retrieving entities using the `normalized`
   format.

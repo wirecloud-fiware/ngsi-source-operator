@@ -1,4 +1,4 @@
-## v4.2.0 (2021-05-XX)
+## v4.2.0 (2021-05-14)
 
 - Añadido un nuevo endpoint de salida para obtener las entidades usando el
     formato `normalized`.

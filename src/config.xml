@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="4.2.0rc2">
+<operator xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="CoNWeT" name="ngsi-source" version="4.2.0">
     <details>
         <title>NGSI source</title>
         <homepage>https://github.com/wirecloud-fiware/ngsi-source</homepage>
@@ -75,13 +75,13 @@
         <preference
             name="ngsi_attributes"
             type="text"
-            label="Requested Attributes"
-            description="A comma separated list of attribute names or the `*` wildcard. Use `*` or an empty value to request all attributes except the builtin ones (`dateCreated`, `dateModified`, ...)."
+            label="Attributes to request"
+            description="A comma separated list of attribute names or the `*` wildcard. Use `*` or an empty value to request all attributes except the builtin ones (`dateCreated`, `dateModified`, ...). This only takes effect when using normalized payloads."
             default="*" />
         <preference
             name="ngsi_metadata"
             type="text"
-            label="Requested Metadata"
+            label="Metadata to request"
             description="A comma separated list of attribute metadata names or the `*` wildcard. Use `*` or an empty value to request all attribute matadata except the builtin ones (`dateCreated`, `dateModified`, ...)."
             default="*" />
         <preference

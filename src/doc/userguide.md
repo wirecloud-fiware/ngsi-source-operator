@@ -35,12 +35,13 @@ Settings
   empty, in that case, entities won't be filtered by id.
 - **Query:** Filter entities by providing a query using the Simple Query
   Language.
-- **Requested Attributes:** A comma separated list of attribute names or the `*`
+- **Attributes to request:** A comma separated list of attribute names or the `*`
   wildcard. Use `*` or an empty value to request all attributes except the
   builtin ones (`dateCreated`, `dateModified`, ...).
-- **Requested Metadata:** A comma separated list of attribute metadata names or
+- **Metadata to request:** A comma separated list of attribute metadata names or
   the `*` wildcard. Use `*` or an empty value to request all attribute matadata
-  except the builtin ones (`dateCreated`, `dateModified`, ...).
+  except the builtin ones (`dateCreated`, `dateModified`, ...). This only takes
+  effect when using normalized payloads.
 - **Monitored NGSI Attributes:** Attributes to monitor for updates. Those
   changes are tracked by creating a subscription inside the context broker. If
   this list is empty, that subscription won't be created. Use `*` to subscribe
