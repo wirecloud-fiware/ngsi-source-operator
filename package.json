@@ -18,7 +18,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-junit-reporter": "^2.0.1",
     "mock-applicationmashup": "^1.0.0-f",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "wirecloud-config-parser": "^0.2.3"
   },
   "private": true,
